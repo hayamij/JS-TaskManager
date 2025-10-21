@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # JS Task Manager
 
 A full-stack Task Management System web application with user authentication, task CRUD, and deployment-ready setup.
