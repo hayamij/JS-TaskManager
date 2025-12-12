@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký - Task Manager</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="auth-card">
+            <h1>Đăng ký</h1>
+            <p class="subtitle">Tạo tài khoản mới</p>
+            
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="username">Tên người dùng</label>
+                    <input type="text" id="username" name="username" required 
+                           placeholder="username" 
+                           pattern="[a-zA-Z0-9_]{3,50}"
+                           title="3-50 ký tự, chỉ chữ cái, số và dấu gạch dưới">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required placeholder="your@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Mật khẩu</label>
+                    <input type="password" id="password" name="password" required 
+                           placeholder="Tối thiểu 6 ký tự"
+                           minlength="6">
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword">Xác nhận mật khẩu</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required 
+                           placeholder="Nhập lại mật khẩu">
+                </div>
+                
+                <div id="errorMessage" class="error-message" style="display: none;"></div>
+                <div id="successMessage" class="success-message" style="display: none;"></div>
+                
+                <button type="submit" class="btn btn-primary">Đăng ký</button>
+            </form>
+            
+            <div class="auth-footer">
+                <p>Đã có tài khoản? <a href="/login.html">Đăng nhập</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/js/api.js"></script>
+    <script src="/js/register.js"></script>
+</body>
+</html>

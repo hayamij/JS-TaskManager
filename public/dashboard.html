@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Task Manager</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h2>📋 Task Manager</h2>
+            </div>
+            <div class="nav-menu">
+                <span id="userInfo" class="user-info"></span>
+                <button id="logoutBtn" class="btn btn-secondary">Đăng xuất</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Statistics Cards -->
+        <div class="stats-grid">
+            <div class="stat-card stat-total">
+                <div class="stat-icon">📊</div>
+                <div class="stat-content">
+                    <h3 id="statTotal">0</h3>
+                    <p>Tổng công việc</p>
+                </div>
+            </div>
+            
+            <div class="stat-card stat-pending">
+                <div class="stat-icon">⏳</div>
+                <div class="stat-content">
+                    <h3 id="statPending">0</h3>
+                    <p>Chờ xử lý</p>
+                </div>
+            </div>
+            
+            <div class="stat-card stat-progress">
+                <div class="stat-icon">🔄</div>
+                <div class="stat-content">
+                    <h3 id="statInProgress">0</h3>
+                    <p>Đang làm</p>
+                </div>
+            </div>
+            
+            <div class="stat-card stat-completed">
+                <div class="stat-icon">✅</div>
+                <div class="stat-content">
+                    <h3 id="statCompleted">0</h3>
+                    <p>Hoàn thành</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Task Management Section -->
+        <div class="task-section">
+            <div class="section-header">
+                <h2>Danh sách công việc</h2>
+                <button id="createTaskBtn" class="btn btn-primary">+ Tạo công việc mới</button>
+            </div>
+            
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <button class="tab-btn active" data-status="ALL">Tất cả</button>
+                <button class="tab-btn" data-status="PENDING">Chờ xử lý</button>
+                <button class="tab-btn" data-status="IN_PROGRESS">Đang làm</button>
+                <button class="tab-btn" data-status="COMPLETED">Hoàn thành</button>
+            </div>
+            
+            <!-- Task List -->
+            <div id="taskList" class="task-list">
+                <div class="loading">Đang tải...</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Create/Edit Task Modal -->
+    <div id="taskModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Tạo công việc mới</h2>
+                <span class="close">&times;</span>
+            </div>
+            
+            <form id="taskForm">
+                <input type="hidden" id="taskId">
+                
+                <div class="form-group">
+                    <label for="taskTitle">Tiêu đề *</label>
+                    <input type="text" id="taskTitle" required maxlength="200" 
+                           placeholder="Nhập tiêu đề công việc">
+                </div>
+                
+                <div class="form-group">
+                    <label for="taskDescription">Mô tả</label>
+                    <textarea id="taskDescription" rows="4" maxlength="1000" 
+                              placeholder="Nhập mô tả chi tiết (tùy chọn)"></textarea>
+                </div>
+                
+                <div id="taskFormError" class="error-message" style="display: none;"></div>
+                
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelTaskBtn">Hủy</button>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="/js/api.js"></script>
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,5 +1,5 @@
-const { DomainException } = require('../../domain/exceptions/DomainException');
-const { DeleteTaskInputDTO, DeleteTaskOutputDTO } = require('../dto/DeleteTaskDTO');
+const { DomainException } = require('../../../domain/exceptions/DomainException');
+const { DeleteTaskInputDTO, DeleteTaskOutputDTO } = require('../../dto/DeleteTaskDTO');
 
 /**
  * Delete Task Use Case

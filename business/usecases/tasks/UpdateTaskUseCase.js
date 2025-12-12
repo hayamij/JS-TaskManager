@@ -1,5 +1,5 @@
-const { DomainException } = require('../../domain/exceptions/DomainException');
-const { UpdateTaskInputDTO, UpdateTaskOutputDTO } = require('../dto/UpdateTaskDTO');
+const { DomainException } = require('../../../domain/exceptions/DomainException');
+const { UpdateTaskInputDTO, UpdateTaskOutputDTO } = require('../../dto/UpdateTaskDTO');
 
 /**
  * Update Task Use Case

@@ -1,5 +1,5 @@
-const { DomainException } = require('../../domain/exceptions/DomainException');
-const { LoginUserInputDTO, LoginUserOutputDTO } = require('../dto/LoginUserDTO');
+const { DomainException } = require('../../../domain/exceptions/DomainException');
+const { LoginUserInputDTO, LoginUserOutputDTO } = require('../../dto/LoginUserDTO');
 
 /**
  * Login User Use Case

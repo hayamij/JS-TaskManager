@@ -1,169 +1,348 @@
-# JS Task Manager
+# 📋 JS Task Manager
 
-A full-stack Task Management System web application with user authentication, task CRUD, and deployment-ready setup.
+A production-ready Task Management System built with **Clean Architecture** principles using Node.js + Express + **SQL Server** + Frontend (HTML/CSS/JS).
 
-## Features
+## ✨ Features
 
-- User registration, login, and logout
-- Password hashing with bcrypt
-- JWT-based authentication for securing API endpoints
-- MongoDB with Mongoose for data storage
-- Full CRUD for tasks
-- Task classification by status: Pending, In Progress, Completed
-- Security best practices: Helmet, CORS
-- Config via dotenv
-- Docker and Heroku deployment instructions
+### Backend
+- ✅ **User Authentication**: Register, login, logout with JWT
+- ✅ **Password Security**: bcrypt hashing with configurable salt rounds
+- ✅ **Task Management**: Full CRUD operations with status tracking
+- ✅ **Status Workflow**: Pending → In Progress → Completed with business rules
+- ✅ **Authorization**: User-owned tasks with permission checks
+- ✅ **Security**: Helmet, CORS, input validation, parameterized queries
+- ✅ **Clean Architecture**: Domain-driven design, testable, maintainable
+- ✅ **SQL Server**: T-SQL database with stored procedures and triggers
+- ✅ **Comprehensive Tests**: Unit + integration tests with Jest
+- ✅ **Deployment Ready**: Docker + SQL Server configurations
 
-## Tech Stack
+### Frontend
+- ✅ **Responsive UI**: Mobile-first design with vanilla HTML/CSS/JS
+- ✅ **Landing Page**: Feature showcase and call-to-action
+- ✅ **Authentication Pages**: Login and registration with validation
+- ✅ **Dashboard**: RSQL Server, JWT) │  ← Framework-specific
+├─────────────────────────────────────┤
+│   Adapters (Controllers, Repos)    │  ← HTTP & Data translation
+├─────────────────────────────────────┤
+│   Business (Use Cases, DTOs)       │  ← Application logic
+├─────────────────────────────────────┤
+│   Domain (Entities, Rules)         │  ← Pure business logic
+└─────────────────────────────────────┘
 
-- Node.js + Express
-- MongoDB (Mongoose)
-- bcrypt for password hashing
-- jsonwebtoken for JWTs
-- Helmet and CORS for security
-- dotenv for configuration
-- Docker (optional)
-- Heroku (optional deployment)
-
-## Project Structure
-
-```
-server.js
-router/
-  verifyUser.js
-package.json
-README.md
-```
-
-## Environment Variables
-
-Create a `.env` file in the project root with the following variables:
+Frontend (public/) → Backend API → SQL Serverre** with strict layer separation:
 
 ```
-PORT=3000
-MONGODB_URI=mongodb://localhost:27017/taskmanager
-JWT_SECRET=your_jwt_secret_here
-JWT_EXPIRES_IN=1d
-NODE_ENV=development
+┌─────────────────────────────────────┐
+│   Infrastructure (MongoDB, JWT)    │  ← Framework-specific
+├─────────────────────────────────────┤
+│   Adapters (Controllers, Repos)    │  ← HTTP & Data translation
+├─────────────────────────────────────┤
+│   Business (Use Cases, DTOs)       │  ← Application logic
+├─────────────────────────────────────┤
+│   Domain (Entities, Rules)         │  ← Pure business logic
+└─────────────────────────────────────┘
 ```
 
-Adjust `MONGODB_URI` for your environment (Atlas connection string or local MongoDB).
+**Key Benefits:**
+- Database abstracted via repository pattern
+- Clean separation between frontend and backendess layers have zero dependencies)
+- Testable business logic in isolation
+- Easy to swap databases or frameworks
+- Maintainable for teams
 
-## Local Setup (Windows PowerShell)
+📖 **Read more:** [ARCHITECTURE.md](./ARCHITECTURE.md)
 
-1. Install dependencies:
+## 📁 Project Structure
 
+```
+domain/                  # Pure business entities
+├── entities/           # User, Task
+├── valueobjects/       # TaskStatus
+└── exceptions/         # DomainException
+
+business/               # Use cases & interfaces
+├── usecases/
+│   ├── auth/          # Register, Login, Verify
+│   └── tasks/         # CRUD + Statistics
+├── dto/               # Input/Output DTOs
+└── ports/             # Repository interfaces
+
+adapters/               # Controllers & Repositories
+├── controllers/        # AuthController, TaskController
+├── middleware/         # AuthMiddleware
+└── repositor
+│   ├── models/        # SQL Server query classes
+│   └── schemas/       # SQL table definitions
+├── security/          # bcrypt, JWT
+└── config/            # Environment config
+
+public/                 # Frontend files
+├── index.html         # Landing page
+├── login.html         # Login page
+├── register.html      # Registration
+├── dashboard.html     # Main app
+├── css/              # Styles
+└── js/               # Frontend logic
+
+tests/                  # Comprehensive coverage
+├── domain/            # Entity tests
+├─**SQL Server 2019+** (Express/Developer/Standard)
+  - Windows: Download from Microsoft
+  - Linux/Mac: Use Docker
+
+### Installation
+
+**Step 1: Setup SQL Server**
+```bash
+# Using Docker (recommended for Linux/Mac)
+docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=YourStrong@Password" \
+  -p 1433:1433 --name sqlserver \
+  -d mcr.microsoft.com/mssql/server:2022-latest
+```
+
+**Step 2: Create Database**
+```sql
+CREATE DATABASE TaskManager;
+GO
+USE TaskManager;
+GO
+-- Run: infrastructure/database/schemas/create-tables.sql
+```
+
+**Step 3: Install & Configure**
 ```powershell
+# Clone repository
+cd JS-TaskManager
+
+# Install dependencies
 npm install
+
+# Setup environment
+Copy-Item .env.example .env
+# Edit .env with your SQL Server credentials:
+# DB_USER=sa
+# DB_PASSWORD=YourStrong@Password
+# DB_SERVER=localhost
+# DB_DATABASE=TaskManager
+
+# Start server
+npm run dev
 ```
 
-2. Create a `.env` file (see Environment Variables above).
+**Step 4: Access Application**
+- Frontend: `http://localhost:3000`
+- API: `http://localhost:3000/api`
+- Health: `http://localhost:3000/health
+npm install
 
-3. Start the server (development):
+# Setup environment
+Copy-Item .env.example .env
+# Edit .env with your MongoDB URI and JWT secret
 
-```powershell
-npm run dev # or: node server.js
+# Start server
+npm run dev
 ```
 
-The API will be available at `http://localhost:3000` (or the port you set).
+Server runs at `http://localhost:3000`
 
-## API Endpoints
+📖 **Full guide:** [QUICK_START.md](./QUICK_START.md)
 
-The project provides the following API endpoints (adjust base URL/port as needed):
-
-Authentication:
-
-- POST /auth/register
-  - Body: { "username": "user", "email": "email@example.com", "password": "pass" }
-  - Response: created user info (without password)
-
-- POST /auth/login
-  - Body: { "email": "email@example.com", "password": "pass" }
-  - Response: { "token": "<jwt>" }
-
-- POST /auth/logout
-  - Invalidate token on client side (server may implement token blacklist)
-
-Tasks (require Authorization: Bearer <token>):
-
-- GET /tasks
-  - List tasks for the logged-in user
-
-- POST /tasks
-  - Create a new task
-  - Body: { "title": "Task title", "description": "...", "status": "Pending" }
-
-- GET /tasks/:id
-  - Get a single task by id
-
-- PUT /tasks/:id
-  - Update a task
-
-- DELETE /tasks/:id
-  - Delete a task
-
-Status values: `Pending`, `In Progress`, `Completed`.
-
-## Security Notes
-
-- Passwords are hashed with bcrypt before storing.
-- JWTs are used for stateless session management. Keep `JWT_SECRET` secure.
-- Helmet sets secure HTTP headers.
-- CORS is enabled; configure allowed origins in your server code.
-
-## Docker
-
-Build and run with Docker:
+## 🧪 Testing
 
 ```powershell
-# Build image
+# Run all tests with coverage
+npm test
+## 📡 API Endpoints
+
+### Authentication (Public)
+- `POST /api/auth/register` - Create account
+- `POST /api/auth/login` - Get JWT token
+- `GET /api/auth/me` - Get current user
+- `POST /api/auth/logout` - Client-side logout
+
+### Tasks (Protected - requires JWT)
+- `POST /api/tasks` - Create task
+- `GET /api/tasks` - List user's tasks (filter by status)
+- `GET /api/tasks/:id` - Get task details
+- `PUT /api/tasks/:id` - Update task
+- `DELETE /api/tasks/:id` - Delete task
+- `PATCH /api/tasks/:id/status` - Change status
+- `GET /api/tasks/statistics` - Get task stats
+
+**Example:**
+```bash
+# Register
+curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"username":"john","email":"john@example.com","password":"pass123"}'
+
+# Login
+curl -X POST http://localhost:3000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"john@example.com","password":"pass123"}'
+
+# Create Task (use token from login)
+curl -X POST http://localhost:3000/api/tasks \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"title":"Buy groceries","description":"Milk, eggs"}'
+```
+
+📖 **Full API docs:** [API_DOCUMENTATION.md](./API_DOCUMENTATION.md)
+
+---
+
+## 🎨 Frontend Usage
+
+### Pages
+
+1. **Landing Page** (`/`)
+   - Features overview
+   - Links to login/register
+
+2. **Register** (`/register.html`)
+   - Create new account
+   - Username, email, password validation
+
+3. **Login** (`/login.html`)
+   - Authenticate with email/password
+   - Receives JWT token
+
+4. **Dashboard** (`/dashboard.html`)
+   - View statistics (total, pending, in progress, completed)
+   - Create new tasks
+   - Filter tasks by status
+   - Edit/delete tasks
+   - Change task status
+
+### Usage Flow
+
+```
+1. Open http://localhost:3000
+2. Click "Đăng ký" → Register account
+3. Login with credentials
+4. Dashboard loads with statistics
+5. Click "+ Tạo công việc mới" → Create task
+6. View/filter tasks by status
+7. Click status buttons to update task progress
+8. Edit/delete tasks as needed
+```
+
+📖 **Full frontend guide:** [FRONTEND_GUIDE.md](./FRONTEND_GUIDE.md)
+
+---
+
+## 🔄 MongoDB → SQL Server Migration
+
+This project has been migrated from MongoDB to SQL Server. Key changes:
+
+- **Database:** MongoDB → Microsoft SQL Server
+- **Driver:** Mongoose → mssql
+- **IDs:** ObjectId → UNIQUEIDENTIFIER (GUID)
+- **Schema:** Collections → Tables with constraints
+- **Queries:** Mongoose methods → Parameterized SQL
+
+📖 **Full migration guide:** [MIGRATION_GUIDE.md](./MIGRATION_GUIDE.md)
+
+---
+
+## 🔒 Security Notes
+
+- **Passwords:** bcrypt hashing with configurable salt rounds
+- **Authentication:** JWT with expiration
+- **SQL Injection:** All queries use parameterized statements
+- **XSS:** User input escaped in frontend
+- **CORS:** Configurable origins
+- **Headers:** Helmet middleware for security headers
+## 🐳 Docker Deployment
+
+### SQL Server + Application
+
+```powershell
+# 1. Start SQL Server in Docker
+docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=YourStrong@Password" \
+  -p 1433:1433 --name sqlserver \
+  -d mcr.microsoft.com/mssql/server:2022-latest
+
+# 2. Build application
 docker build -t js-task-manager .
 
-# Run (example, using local MongoDB or set MONGODB_URI to an Atlas URI)
-docker run -d -p 3000:3000 --env-file .env --name js-task-manager js-task-manager
+# 3. Run application (connect to SQL Server)
+docker run -d -p 3000:3000 \
+  -e DB_SERVER=host.docker.internal \
+  -e DB_USER=sa \
+  -e DB_PASSWORD=YourStrong@Password \
+  -e DB_DATABASE=TaskManager \
+  js-task-manager
 ```
 
-Dockerfile suggestions (if missing):
+## ☁️ Azure Deployment
 
-FROM node:18-alpine
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci --only=production
-COPY . .
-CMD ["node", "server.js"]
+### With Azure SQL Database
 
-## Heroku Deployment
+```powershell
+# 1. Create Azure SQL Database
+az sql server create --name yourserver --resource-group yourgroup
+az sql db create --name TaskManager --server yourserver
 
-1. Create a Heroku app
-2. Set config vars on Heroku (`MONGODB_URI`, `JWT_SECRET`, etc.)
-3. Deploy via Git or GitHub integration
+# 2. Deploy to Azure App Service
+az webapp create --name your-app --resource-group yourgroup
+az webapp deployment source config --name your-app --repo-url YOUR_REPO
 
-Procfile suggestion:
+# 3. Configure connection string
+az webapp config appsettings set --name your-app --settings \
+  DB_SERVER=yourserver.database.windows.net \
+  DB_USER=youradmin \
+  DB_PASSWORD=YourPassword \
+  DB_DATABASE=TaskManager \
+  JWT_SECRET=your-secret
 
-web: node server.js
+# Deploy
+git push heroku main
+```
 
-## Testing
+## 🔐 Security Features
 
-Add tests with your preferred test runner (Jest, Mocha). Example test ideas:
+- **Password hashing:** bcrypt with configurable salt rounds
+- **JWT authentication:** Stateless session management
+- **Input validation:** Domain-level validation rules
+- **Authorization:** User ownership checks on all operations
+- **HTTP security:** Helmet middleware for secure headers
+- **CORS:** Configurable cross-origin resource sharing
 
-- Auth: register, login, protected routes
-- Tasks: create, read, update, delete, status transitions
+## 🎯 Business Rules Enforced
 
-## Troubleshooting
+- Username: 3-50 chars, alphanumeric + underscore
+- Email: Valid format, unique
+- Password: 6+ chars
+- Task status transitions: `Completed → Pending` blocked
+- Task ownership: Only owner can modify/delete
 
-- "EADDRINUSE": another process is using the port. Change `PORT` or stop the other process.
-- MongoDB connection errors: verify `MONGODB_URI` and network access (Atlas IP whitelist).
-- JWT auth errors: ensure `Authorization` header is `Bearer <token>`.
+## 📚 Documentation
 
-## Next Steps
+- 📖 [Quick Start Guide](./QUICK_START.md) - Get started in 5 minutes
+- 📖 [API Documentation](./API_DOCUMENTATION.md) - Complete API reference
+- 📖 [Architecture Guide](./ARCHITECTURE.md) - Clean Architecture explained
 
-- Implement token blacklisting for logout (optional)
-- Add role-based access control (admin/users)
-- Frontend UI (React/Vue) to consume the API
+## 🤝 Contributing
 
-## License
+1. Fork the repository
+2. Create feature branch: `git checkout -b feature/AmazingFeature`
+3. Follow Clean Architecture principles
+4. Write tests (maintain 90%+ coverage)
+5. Commit: `git commit -m 'Add AmazingFeature'`
+6. Push: `git push origin feature/AmazingFeature`
+7. Open Pull Request
 
+## 📝 License
+
+MIT License - see [LICENSE](./LICENSE) file
+
+## 🙏 Acknowledgments
+
+- Clean Architecture by Robert C. Martin
+- Domain-Driven Design principles
+- SOLID principles for maintainable code
 MIT
-=======
+
 A full-stack Task Management System web application featuring robust user authentication (Register/Login/Logout) using bcrypt for password hashing and JWT for session security. The system utilizes MongoDB/Mongoose for data management and provides full CRUD functionality for tasks, allowing classification by status (Pending, In Progress, Completed). Security is enhanced via Helmet/CORS and configuration managed by dotenv. Deployment target is Heroku/Docker.
->>>>>>> 0596063e3fe10daa6f86cbe4274928dc2cbc7b32

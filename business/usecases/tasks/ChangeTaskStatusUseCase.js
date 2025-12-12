@@ -1,5 +1,6 @@
-const { DomainException } = require('../../domain/exceptions/DomainException');
-const { TaskStatus } = require('../../domain/valueobjects/TaskStatus');
+const { DomainException } = require('../../../domain/exceptions/DomainException');
+const { TaskStatus } = require('../../../domain/valueobjects/TaskStatus');
+const { ChangeTaskStatusInputDTO, ChangeTaskStatusOutputDTO } = require('../../dto/ChangeTaskStatusDTO');
 
 /**
  * Change Task Status Use Case

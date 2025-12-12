@@ -1,6 +1,6 @@
-const { User } = require('../../domain/entities/User');
-const { DomainException } = require('../../domain/exceptions/DomainException');
-const { RegisterUserInputDTO, RegisterUserOutputDTO } = require('../dto/RegisterUserDTO');
+const { User } = require('../../../domain/entities/User');
+const { DomainException } = require('../../../domain/exceptions/DomainException');
+const { RegisterUserInputDTO, RegisterUserOutputDTO } = require('../../dto/RegisterUserDTO');
 
 /**
  * Register User Use Case

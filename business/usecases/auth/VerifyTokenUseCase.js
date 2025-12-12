@@ -1,4 +1,5 @@
-const { DomainException } = require('../../domain/exceptions/DomainException');
+const { DomainException } = require('../../../domain/exceptions/DomainException');
+const { VerifyTokenInputDTO, VerifyTokenOutputDTO } = require('../../dto/VerifyTokenDTO');
 
 /**
  * Verify Token Use Case

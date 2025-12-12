@@ -1,4 +1,5 @@
-const { TaskStatus } = require('../../domain/valueobjects/TaskStatus');
+const { TaskStatus } = require('../../../domain/valueobjects/TaskStatus');
+const { GetTaskStatisticsInputDTO, GetTaskStatisticsOutputDTO } = require('../../dto/GetTaskStatisticsDTO');
 
 /**
  * Get Task Statistics Use Case

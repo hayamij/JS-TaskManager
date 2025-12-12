@@ -1,6 +1,6 @@
-const { Task } = require('../../domain/entities/Task');
-const { DomainException } = require('../../domain/exceptions/DomainException');
-const { CreateTaskInputDTO, CreateTaskOutputDTO } = require('../dto/CreateTaskDTO');
+const { Task } = require('../../../domain/entities/Task');
+const { DomainException } = require('../../../domain/exceptions/DomainException');
+const { CreateTaskInputDTO, CreateTaskOutputDTO } = require('../../dto/CreateTaskDTO');
 
 /**
  * Create Task Use Case

@@ -1,5 +1,5 @@
-const { DomainException } = require('../../domain/exceptions/DomainException');
-const { GetTaskInputDTO, GetTaskOutputDTO } = require('../dto/GetTaskDTO');
+const { DomainException } = require('../../../domain/exceptions/DomainException');
+const { GetTaskInputDTO, GetTaskOutputDTO } = require('../../dto/GetTaskDTO');
 
 /**
  * Get Task By ID Use Case
