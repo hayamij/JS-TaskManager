@@ -501,12 +501,14 @@ describe('Task API Integration Tests', () => {
             expect(deleteResponse.status).toBe(200);
             expect(deleteResponse.body.success).toBe(true);
 
-            // Verify it's deleted by trying to get it
+            // Verify it's soft deleted (status changed to CANCELLED, not removed from DB)
             const getResponse = await request(app)
                 .get(`/api/tasks/${taskToDeleteId}`)
                 .set('Authorization', `Bearer ${authToken}`);
 
-            expect(getResponse.status).toBe(404);
+            expect(getResponse.status).toBe(200);
+            expect(getResponse.body).toHaveProperty('task');
+            expect(getResponse.body.task.status).toBe('CANCELLED');
         });
 
         test('should return 404 when deleting non-existent task', async () => {

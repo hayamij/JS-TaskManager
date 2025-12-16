@@ -11,7 +11,8 @@ describe('DeleteTaskUseCase', () => {
     beforeEach(() => {
         mockTaskRepository = {
             findById: jest.fn(),
-            delete: jest.fn()
+            delete: jest.fn(),
+            update: jest.fn()
         };
 
         useCase = new DeleteTaskUseCase(mockTaskRepository);
@@ -24,15 +25,15 @@ describe('DeleteTaskUseCase', () => {
             
             const task = Task.reconstruct('task123', 'Task 1', 'Description', TaskStatus.PENDING, 'user123', new Date(), new Date());
             mockTaskRepository.findById.mockResolvedValue(task);
-            mockTaskRepository.delete.mockResolvedValue(true);
+            mockTaskRepository.update.mockResolvedValue(task);
 
             // Act
             const result = await useCase.execute(inputDTO);
 
             // Assert
             expect(result.success).toBe(true);
-            expect(result.message).toContain('deleted successfully');
-            expect(mockTaskRepository.delete).toHaveBeenCalledWith('task123');
+            expect(result.message).toContain('cancelled successfully');
+            expect(mockTaskRepository.update).toHaveBeenCalledWith(task);
         });
     });
 

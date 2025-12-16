@@ -19,10 +19,13 @@ describe('TaskStatus Value Object', () => {
         it('should return all status values', () => {
             const statuses = TaskStatus.getAllStatuses();
             
-            expect(statuses).toHaveLength(3);
+            expect(statuses).toHaveLength(6);
+            expect(statuses).toContain('SCHEDULED');
             expect(statuses).toContain('PENDING');
             expect(statuses).toContain('IN_PROGRESS');
             expect(statuses).toContain('COMPLETED');
+            expect(statuses).toContain('FAILED');
+            expect(statuses).toContain('CANCELLED');
         });
     });
 

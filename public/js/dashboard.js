@@ -370,9 +370,9 @@ function createTaskRow(task) {
             </td>
             <td class="td-date">${task.createdAtFormatted || formatDate(task.createdAt)}</td>
             <td class="td-actions">
-                ${task.canComplete ? `<button class="btn-table btn-complete" data-id="${task.id}" data-status="COMPLETED" title="Hoàn thành">✓</button>` : ''}
-                ${task.canEdit ? `<button class="btn-table btn-edit" data-id="${task.id}" title="Sửa">✏️</button>` : ''}
-                ${task.canDelete ? `<button class="btn-table btn-delete" data-id="${task.id}" title="Xóa">🗑️</button>` : ''}
+                ${task.canComplete ? `<button class="btn-table btn-complete" data-id="${task.id}" data-status="COMPLETED" title="Hoàn thành"></button>` : ''}
+                ${task.canEdit ? `<button class="btn-table btn-edit" data-id="${task.id}" title="Sửa">Sửa</button>` : ''}
+                ${task.canDelete ? `<button class="btn-table btn-delete" data-id="${task.id}" title="Xóa">Xóa</button>` : ''}
             </td>
         </tr>
     `;

@@ -14,6 +14,14 @@ class ErrorHandlerMiddleware {
      * @param {Function} next - Next middleware
      */
     static handle(err, req, res, next) {
+        // Handle null/undefined errors
+        if (!err) {
+            return res.status(500).json({
+                success: false,
+                error: 'An unknown error occurred'
+            });
+        }
+
         // Log error details
         ErrorHandlerMiddleware.logError(err, req);
 
@@ -86,12 +94,12 @@ class ErrorHandlerMiddleware {
             'FORBIDDEN': 403
         };
 
-        const statusCode = statusCodeMap[err.code] || 400;
+        const statusCode = statusCodeMap[err.errorCode] || 400;
 
         return res.status(statusCode).json({
             success: false,
             error: err.message,
-            code: err.code
+            code: err.errorCode
         });
     }
 
