@@ -19,80 +19,73 @@
         </div>
     </div>
     
-    <div class="container">
-        <!-- Statistics Cards -->
-        <div class="stats-container">
-            <div class="stat-card">
-                <div class="stat-header">
-                    <span class="stat-label">Tổng công việc</span>
-                    <span class="stat-icon">📊</span>
-                </div>
-                <div class="stat-value" id="statTotal">0</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-header">
-                    <span class="stat-label">Đang chờ</span>
-                    <span class="stat-icon">📅</span>
-                </div>
-                <div class="stat-value" id="statScheduled">0</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-header">
-                    <span class="stat-label">Đang làm</span>
-                    <span class="stat-icon">🔄</span>
-                </div>
-                <div class="stat-value" id="statInProgress">0</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-header">
-                    <span class="stat-label">Hoàn thành</span>
-                    <span class="stat-icon">✅</span>
-                </div>
-                <div class="stat-value" id="statCompleted">0</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-header">
-                    <span class="stat-label">Không hoàn thành</span>
-                    <span class="stat-icon">❌</span>
-                </div>
-                <div class="stat-value" id="statFailed">0</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-header">
-                    <span class="stat-label">Đã hủy</span>
-                    <span class="stat-icon">🚫</span>
-                </div>
-                <div class="stat-value" id="statCancelled">0</div>
-            </div>
-        </div>
+    <div class="admin-layout">
+        <!-- Sidebar Container (Loaded via sidebar.js) -->
+        <div id="sidebarContainer"></div>
         
-        <!-- Insights Container (NEW - from backend) -->
-        <div id="insightsContainer" class="insights-container"></div>
-        
-        <!-- Task Controls -->
-        <div class="task-controls">
-            <div class="filter-buttons">
-                <button class="filter-btn active" data-status="ALL">Tất cả</button>
-                <button class="filter-btn" data-status="SCHEDULED">Đang chờ</button>
-                <button class="filter-btn" data-status="IN_PROGRESS">Đang làm</button>
-                <button class="filter-btn" data-status="COMPLETED">Hoàn thành</button>
-                <button class="filter-btn" data-status="FAILED">Không hoàn thành</button>
-                <button class="filter-btn" data-status="CANCELLED">Đã hủy</button>
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Page Header (for Table view) -->
+            <div class="page-header" style="display: none;">
+                <div class="page-title">
+                    <h1 id="pageTitle">QUẢN LÝ CÔNG VIỆC</h1>
+                    <p id="pageSubtitle">Quản lý công việc theo trạng thái</p>
+                </div>
+                <div class="page-actions">
+                    <button id="createTaskBtnTable" class="btn btn-primary">+ THÊM CÔNG VIỆC</button>
+                </div>
             </div>
-            <button id="createTaskBtn" class="btn btn-primary">+ Tạo công việc mới</button>
-        </div>
-        
-        <!-- Task List -->
-        <div id="tasksList" class="tasks-grid">
-            <div class="loading-overlay">
-                <div class="spinner"></div>
+
+            <!-- Insights Container (Card view) -->
+            <div id="insightsContainer" class="insights-container"></div>
+            
+            <!-- Page Actions (Card view) -->
+            <div class="page-actions-bar">
+                <button id="createTaskBtn" class="btn btn-primary">+ Tạo công việc mới</button>
             </div>
-        </div>
+            
+            <!-- Filters Section (for Table view) -->
+            <div class="filters-section" style="display: none;">
+                <div class="filter-group">
+                    <label for="filterTitle">Tìm kiếm:</label>
+                    <input type="text" id="filterTitle" class="form-control filter-input" 
+                           placeholder="Nhập tiêu đề hoặc mô tả...">
+                </div>
+                <div class="filter-group">
+                    <label for="sortOrder">Sắp xếp:</label>
+                    <select id="sortOrder" class="form-control filter-select">
+                        <option value="newest">Mới nhất</option>
+                        <option value="oldest">Cũ nhất</option>
+                        <option value="deadline">Deadline gần nhất</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Task List (Card View - Dashboard) -->
+            <div id="tasksList" class="tasks-grid">
+                <div class="loading">Đang tải...</div>
+            </div>
+
+            <!-- Task Table (Table View - Status filters) -->
+            <div class="table-container" style="display: none;">
+                <table class="task-table">
+                    <thead>
+                        <tr>
+                            <th>Tiêu đề</th>
+                            <th>Mô tả</th>
+                            <th>Ngày bắt đầu</th>
+                            <th>Deadline</th>
+                            <th>Trạng thái</th>
+                            <th>Ngày tạo</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody id="taskTableBody">
+                        <tr><td colspan="7" class="loading-cell">Đang tải...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
     </div>
     
     <!-- Create/Edit Task Modal -->
@@ -139,6 +132,7 @@
     </div>
     
     <script src="/js/api.js"></script>
+    <script src="/js/sidebar.js"></script>
     <script src="/js/dashboard.js"></script>
 </body>
 </html>

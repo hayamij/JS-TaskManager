@@ -107,6 +107,7 @@ class GetTaskListForDisplayUseCase {
         // Format dates
         const startDateFormatted = this._formatDate(startDate);
         const deadlineFormatted = deadline ? this._formatDate(deadline) : null;
+        const createdAtFormatted = this._formatDate(task.getCreatedAt());
 
         // Calculate overdue message
         const overdueMessage = isOverdue ? this._calculateOverdueMessage(deadline) : null;
@@ -160,7 +161,8 @@ class GetTaskListForDisplayUseCase {
             deadline: task.getDeadline(),
             progress: progress || 0,
             isOverdue: isOverdue,
-            displayData
+            displayData,
+            createdAtFormatted
         });
     }
 

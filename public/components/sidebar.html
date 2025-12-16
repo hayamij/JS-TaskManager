@@ -1,0 +1,45 @@
+<!-- Left Sidebar Navigation -->
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h3>QUẢN LÝ CÔNG VIỆC</h3>
+        <p class="sidebar-subtitle">Quản lý công việc theo trạng thái</p>
+    </div>
+    
+    <nav class="sidebar-nav">
+        <a href="/dashboard.html" class="nav-item nav-dashboard" data-page="dashboard">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Dashboard</span>
+        </a>
+        <div class="nav-divider"></div>
+        <a href="/dashboard.html?status=ALL" class="nav-item" data-status="ALL">
+            <span class="nav-icon">📊</span>
+            <span class="nav-label">Tổng công việc</span>
+            <span class="nav-badge" id="badge-total">0</span>
+        </a>
+        <a href="/dashboard.html?status=SCHEDULED" class="nav-item" data-status="SCHEDULED">
+            <span class="nav-icon">📅</span>
+            <span class="nav-label">Đang chờ</span>
+            <span class="nav-badge" id="badge-scheduled">0</span>
+        </a>
+        <a href="/dashboard.html?status=IN_PROGRESS" class="nav-item" data-status="IN_PROGRESS">
+            <span class="nav-icon">🔄</span>
+            <span class="nav-label">Đang làm</span>
+            <span class="nav-badge" id="badge-inprogress">0</span>
+        </a>
+        <a href="/dashboard.html?status=COMPLETED" class="nav-item" data-status="COMPLETED">
+            <span class="nav-icon">✅</span>
+            <span class="nav-label">Hoàn thành</span>
+            <span class="nav-badge" id="badge-completed">0</span>
+        </a>
+        <a href="/dashboard.html?status=FAILED" class="nav-item" data-status="FAILED">
+            <span class="nav-icon">❌</span>
+            <span class="nav-label">Không hoàn thành</span>
+            <span class="nav-badge" id="badge-failed">0</span>
+        </a>
+        <a href="/dashboard.html?status=CANCELLED" class="nav-item" data-status="CANCELLED">
+            <span class="nav-icon">🚫</span>
+            <span class="nav-label">Đã hủy</span>
+            <span class="nav-badge" id="badge-cancelled">0</span>
+        </a>
+    </nav>
+</aside>

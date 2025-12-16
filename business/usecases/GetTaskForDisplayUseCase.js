@@ -53,6 +53,9 @@ class GetTaskForDisplayUseCase {
 
         // Step 3: Calculate display data (THIS IS THE KEY - backend does ALL the work)
         const displayData = this._calculateDisplayData(task);
+        
+        // Format createdAt
+        const createdAtFormatted = this._formatDate(task.getCreatedAt());
 
         // Step 4: Build DTO using entity getters
         const dto = new TaskDisplayDTO({
@@ -67,7 +70,8 @@ class GetTaskForDisplayUseCase {
             deadline: task.getDeadline(),
             progress: task.getProgressPercentage() || 0,
             isOverdue: task.isOverdue(),
-            displayData
+            displayData,
+            createdAtFormatted
         });
 
         return dto;

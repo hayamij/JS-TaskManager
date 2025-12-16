@@ -25,6 +25,7 @@ class TaskDisplayDTO {
      * @param {number} params.progress - Progress percentage (0-100)
      * @param {boolean} params.isOverdue - Whether task is overdue
      * @param {TaskDisplayData} params.displayData - Display data value object
+     * @param {string} params.createdAtFormatted - Formatted creation date
      */
     constructor({
         id,
@@ -38,7 +39,8 @@ class TaskDisplayDTO {
         deadline,
         progress,
         isOverdue,
-        displayData
+        displayData,
+        createdAtFormatted
     }) {
         this.id = id;
         this.title = title;
@@ -58,6 +60,7 @@ class TaskDisplayDTO {
         this.progressColor = displayData.progressColor;
         this.startDateFormatted = displayData.startDateFormatted;
         this.deadlineFormatted = displayData.deadlineFormatted;
+        this.createdAtFormatted = createdAtFormatted;
         this.overdueMessage = displayData.overdueMessage;
         this.availableActions = displayData.availableActions;
         this.canEdit = displayData.canEdit;
@@ -91,6 +94,7 @@ class TaskDisplayDTO {
             progressColor: this.progressColor,
             startDateFormatted: this.startDateFormatted,
             deadlineFormatted: this.deadlineFormatted,
+            createdAtFormatted: this.createdAtFormatted,
             overdueMessage: this.overdueMessage,
             availableActions: this.availableActions,
             canEdit: this.canEdit,
