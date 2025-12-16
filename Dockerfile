@@ -1,22 +1,21 @@
 FROM node:18-alpine
 
+# Cài đặt dependencies cho native modules
+RUN apk add --no-cache python3 make g++
+
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Clean install dependencies
+RUN npm ci && npm rebuild bcrypt --build-from-source
 
 # Copy application code
 COPY . .
 
 # Expose port
 EXPOSE 3000
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
 # Start application
 CMD ["node", "index.js"]

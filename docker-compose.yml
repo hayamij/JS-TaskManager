@@ -1,0 +1,55 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: taskmanager-sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrong@Passw0rd
+      - MSSQL_PID=Developer
+      - MSSQL_ENABLE_LOWERCASE_FLAG=1
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+      - ./infrastructure/database/schemas:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "YourStrong@Passw0rd" -Q "SELECT 1" -C || exit 1
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+    networks:
+      - taskmanager-network
+
+  app:
+    build: .
+    container_name: taskmanager-app
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DB_SERVER=sqlserver
+      - DB_USER=fuongtuan
+      - DB_PASSWORD=toilabanhmochi
+      - DB_DATABASE=TaskManager
+      - DB_PORT=1433
+      - DB_ENCRYPT=false
+      - DB_TRUST_SERVER_CERTIFICATE=true
+      - JWT_SECRET=docker-production-secret-change-this-in-real-prod
+      - JWT_EXPIRES_IN=24h
+      - BCRYPT_SALT_ROUNDS=10
+      - CORS_ORIGIN=*
+    restart: unless-stopped
+    networks:
+      - taskmanager-network
+
+networks:
+  taskmanager-network:
+    driver: bridge
+
+volumes:
+  sqlserver-data:

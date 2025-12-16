@@ -87,6 +87,41 @@ npm run test:integration
 
 Server sẽ chạy tại: `http://localhost:3000`
 
+## 🐳 Docker Deployment
+
+### Quick Start
+```bash
+# Build và start containers
+docker-compose up -d --build
+
+# Đợi SQL Server ready (30s)
+timeout /t 30
+
+# Khởi tạo database với dữ liệu mẫu
+docker cp docker-init.sql taskmanager-sqlserver:/tmp/
+docker exec taskmanager-sqlserver /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "YourStrong@Passw0rd" -i /tmp/docker-init.sql -C
+
+# Restart app
+docker-compose restart app
+```
+
+### Credentials
+- **App user**: `fuongtuan` / `toilabanhmochi`
+- **SA account**: `sa` / `YourStrong@Passw0rd`
+- **Test users**: password `password123`
+
+### Useful Commands
+```bash
+# Stop containers
+docker-compose down
+
+# View logs
+docker-compose logs -f app
+
+# Restart app only
+docker-compose restart app
+```
+
 ## 🏗️ Cấu Trúc Dự Án
 
 ### Clean Architecture - 4 Layers
