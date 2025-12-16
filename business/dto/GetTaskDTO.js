@@ -1,16 +1,11 @@
-/**
- * Input DTO for getting tasks
- */
+
 class GetTasksInputDTO {
     constructor(userId, status = null) {
         this.userId = userId;
-        this.status = status; // Optional filter by status
+        this.status = status; 
     }
 }
 
-/**
- * Output DTO for task list
- */
 class GetTasksOutputDTO {
     constructor(tasks) {
         this.tasks = tasks.map(task => ({
@@ -30,19 +25,13 @@ class GetTasksOutputDTO {
     }
 }
 
-/**
- * Input DTO for getting a single task
- */
 class GetTaskInputDTO {
     constructor(taskId, userId) {
         this.taskId = taskId;
-        this.userId = userId; // For authorization check
+        this.userId = userId; 
     }
 }
 
-/**
- * Output DTO for single task
- */
 class GetTaskOutputDTO {
     constructor(task) {
         this.taskId = task.getId();

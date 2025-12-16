@@ -1,8 +1,3 @@
-/**
- * Test suite for GetStatisticsForDisplayUseCase
- * Business Layer Test
- */
-
 const GetStatisticsForDisplayUseCase = require('../../../business/usecases/GetStatisticsForDisplayUseCase');
 const StatisticsDisplayDTO = require('../../../business/dto/StatisticsDisplayDTO');
 const { Task } = require('../../../domain/entities/Task');

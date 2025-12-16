@@ -1,25 +1,11 @@
 const sql = require('mssql');
 
-/**
- * SQL Server Connection Handler
- * Infrastructure layer
- */
 class SqlServerDatabase {
     constructor() {
         this.pool = null;
         this.config = null;
     }
 
-    /**
-     * Connect to SQL Server
-     * @param {Object} config - Connection configuration
-     * @param {string} config.user - Database user
-     * @param {string} config.password - Database password
-     * @param {string} config.server - Server address
-     * @param {string} config.database - Database name
-     * @param {number} config.port - Port (default: 1433)
-     * @param {Object} config.options - Additional options
-     */
     async connect(config) {
         try {
             this.config = {
@@ -44,19 +30,16 @@ class SqlServerDatabase {
             };
 
             this.pool = await sql.connect(this.config);
-            console.log('✅ SQL Server connected successfully');
-            console.log(`   Database: ${config.database}`);
-            console.log(`   Server: ${config.server}`);
+            console.log('SQL Server connected');
+            console.log(`Database: ${config.database}`);
+            console.log(`Server: ${config.server}`);
             return this.pool;
         } catch (error) {
-            console.error('❌ SQL Server connection error:', error.message);
+            console.error('SQL Server connection error:', error.message);
             throw error;
         }
     }
 
-    /**
-     * Disconnect from SQL Server
-     */
     async disconnect() {
         if (this.pool) {
             await this.pool.close();
@@ -65,16 +48,10 @@ class SqlServerDatabase {
         }
     }
 
-    /**
-     * Get connection status
-     */
     isConnected() {
         return this.pool && this.pool.connected;
     }
 
-    /**
-     * Get connection pool
-     */
     getPool() {
         if (!this.pool) {
             throw new Error('Database not connected. Call connect() first.');
@@ -82,9 +59,6 @@ class SqlServerDatabase {
         return this.pool;
     }
 
-    /**
-     * Execute raw query
-     */
     async query(queryString, params = {}) {
         const request = this.getPool().request();
         
@@ -97,13 +71,9 @@ class SqlServerDatabase {
         return result;
     }
 
-    /**
-     * Execute stored procedure
-     */
     async executeProcedure(procedureName, params = {}) {
         const request = this.getPool().request();
-        
-        // Add parameters
+
         Object.entries(params).forEach(([key, value]) => {
             request.input(key, value);
         });
@@ -112,9 +82,6 @@ class SqlServerDatabase {
         return result;
     }
 
-    /**
-     * Begin transaction
-     */
     async beginTransaction() {
         const transaction = new sql.Transaction(this.getPool());
         await transaction.begin();

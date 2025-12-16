@@ -1,14 +1,3 @@
-/**
- * Integration Tests for Task API Endpoints
- * Tests E2E flow: HTTP → Controller → Use Case → Repository → Database
- * 
- * Following knowledge.txt best practices:
- * - RESTful API conventions (GET, POST, PUT, PATCH, DELETE)
- * - Authentication (JWT)
- * - Status codes (200, 201, 400, 401, 404, 500)
- * - Response format: { success, data, message }
- */
-
 const request = require('supertest');
 const { App } = require('../../app');
 const { Config } = require('../../infrastructure/config/Config');
@@ -47,7 +36,7 @@ describe('Task API Integration Tests', () => {
         authToken = loginResponse.body.token;
         testUserId = loginResponse.body.user.id;
 
-        console.log('✅ Test setup complete - User registered and logged in with token');
+        console.log('Test setup complete - User registered and logged in with token');
     });
 
     // Cleanup after all tests
@@ -65,12 +54,8 @@ describe('Task API Integration Tests', () => {
 
         // Stop server and close connections
         await appInstance.stop();
-        console.log('✅ Test cleanup complete');
+        console.log('Test cleanup complete');
     });
-
-    // =================================================================
-    // AUTHENTICATION TESTS
-    // =================================================================
 
     describe('POST /api/tasks - Authentication', () => {
         test('should return 401 when no token provided', async () => {
@@ -98,10 +83,6 @@ describe('Task API Integration Tests', () => {
             expect(response.body.success).toBe(false);
         });
     });
-
-    // =================================================================
-    // CREATE TASK TESTS (POST /api/tasks)
-    // =================================================================
 
     describe('POST /api/tasks - Create Task', () => {
         test('should create task successfully with all fields', async () => {
@@ -201,10 +182,6 @@ describe('Task API Integration Tests', () => {
         });
     });
 
-    // =================================================================
-    // GET TASKS TESTS (GET /api/tasks)
-    // =================================================================
-
     describe('GET /api/tasks - Get All Tasks', () => {
         test('should return all tasks for authenticated user', async () => {
             const response = await request(app)
@@ -253,10 +230,6 @@ describe('Task API Integration Tests', () => {
         });
     });
 
-    // =================================================================
-    // GET TASK BY ID TESTS (GET /api/tasks/:id)
-    // =================================================================
-
     describe('GET /api/tasks/:id - Get Task by ID', () => {
         test('should return task details for valid ID', async () => {
             const response = await request(app)
@@ -288,10 +261,6 @@ describe('Task API Integration Tests', () => {
             expect(response.body.success).toBe(false);
         });
     });
-
-    // =================================================================
-    // UPDATE TASK TESTS (PUT /api/tasks/:id)
-    // =================================================================
 
     describe('PUT /api/tasks/:id - Update Task', () => {
         test('should update task title and description', async () => {
@@ -369,10 +338,6 @@ describe('Task API Integration Tests', () => {
         });
     });
 
-    // =================================================================
-    // CHANGE STATUS TESTS (PATCH /api/tasks/:id/status)
-    // =================================================================
-
     describe('PATCH /api/tasks/:id/status - Change Task Status', () => {
         test('should change task status to IN_PROGRESS', async () => {
             const response = await request(app)
@@ -442,10 +407,6 @@ describe('Task API Integration Tests', () => {
         });
     });
 
-    // =================================================================
-    // GET STATISTICS TESTS (GET /api/tasks/statistics)
-    // =================================================================
-
     describe('GET /api/tasks/statistics - Get Task Statistics', () => {
         test('should return statistics for user tasks', async () => {
             const response = await request(app)
@@ -475,10 +436,6 @@ describe('Task API Integration Tests', () => {
             expect(response.body.success).toBe(false);
         });
     });
-
-    // =================================================================
-    // DELETE TASK TESTS (DELETE /api/tasks/:id)
-    // =================================================================
 
     describe('DELETE /api/tasks/:id - Delete Task', () => {
         test('should delete task successfully', async () => {
@@ -530,10 +487,6 @@ describe('Task API Integration Tests', () => {
             expect(response.body.success).toBe(false);
         });
     });
-
-    // =================================================================
-    // PROGRESS & OVERDUE TESTS (Business Logic Validation)
-    // =================================================================
 
     describe('Progress & Overdue - Business Logic', () => {
         let taskWithDeadline;

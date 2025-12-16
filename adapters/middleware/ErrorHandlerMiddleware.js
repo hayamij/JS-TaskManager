@@ -1,18 +1,8 @@
 const { DomainException } = require('../../domain/exceptions/DomainException');
 const { Config } = require('../../infrastructure/config/Config');
 
-/**
- * Centralized Error Handler Middleware
- * Maps domain exceptions to HTTP status codes and provides consistent error responses
- */
 class ErrorHandlerMiddleware {
-    /**
-     * Global Express error handler
-     * @param {Error} err - Error object
-     * @param {Object} req - Express request
-     * @param {Object} res - Express response
-     * @param {Function} next - Next middleware
-     */
+
     static handle(err, req, res, next) {
         // Handle null/undefined errors
         if (!err) {
@@ -70,13 +60,7 @@ class ErrorHandlerMiddleware {
         ErrorHandlerMiddleware.handleUnexpectedError(err, res);
     }
 
-    /**
-     * Handle domain exceptions with appropriate HTTP status codes
-     * @param {DomainException} err - Domain exception
-     * @param {Object} res - Express response
-     */
     static handleDomainException(err, res) {
-        // Map domain error codes to HTTP status codes
         const statusCodeMap = {
             'TASK_NOT_FOUND': 404,
             'USER_NOT_FOUND': 404,
@@ -103,11 +87,6 @@ class ErrorHandlerMiddleware {
         });
     }
 
-    /**
-     * Handle database errors
-     * @param {Error} err - Database error
-     * @param {Object} res - Express response
-     */
     static handleDatabaseError(err, res) {
         console.error('Database error:', {
             code: err.code,
@@ -143,11 +122,6 @@ class ErrorHandlerMiddleware {
         });
     }
 
-    /**
-     * Handle unexpected errors
-     * @param {Error} err - Error object
-     * @param {Object} res - Express response
-     */
     static handleUnexpectedError(err, res) {
         console.error('Unexpected error:', {
             name: err.name,
@@ -175,11 +149,6 @@ class ErrorHandlerMiddleware {
         });
     }
 
-    /**
-     * Log error with context
-     * @param {Error} err - Error object
-     * @param {Object} req - Express request
-     */
     static logError(err, req) {
         const errorLog = {
             timestamp: new Date().toISOString(),
@@ -196,15 +165,9 @@ class ErrorHandlerMiddleware {
         };
 
         // In production, you would send this to a logging service
-        // (e.g., winston, bunyan, CloudWatch, Sentry)
         console.error('Error occurred:', JSON.stringify(errorLog, null, 2));
     }
 
-    /**
-     * 404 Not Found handler
-     * @param {Object} req - Express request
-     * @param {Object} res - Express response
-     */
     static notFound(req, res) {
         res.status(404).json({
             success: false,

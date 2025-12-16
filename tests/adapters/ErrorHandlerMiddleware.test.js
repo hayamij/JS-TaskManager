@@ -1,8 +1,3 @@
-/**
- * Test suite for ErrorHandlerMiddleware
- * Adapters Layer Test
- */
-
 const { ErrorHandlerMiddleware } = require('../../adapters/middleware/ErrorHandlerMiddleware');
 const { DomainException } = require('../../domain/exceptions/DomainException');
 

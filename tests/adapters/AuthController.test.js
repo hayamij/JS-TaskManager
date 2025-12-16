@@ -1,8 +1,3 @@
-/**
- * Test suite for AuthController
- * Adapters Layer Test
- */
-
 const { AuthController } = require('../../adapters/controllers/AuthController');
 const { DomainException } = require('../../domain/exceptions/DomainException');
 

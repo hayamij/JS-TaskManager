@@ -1,26 +1,19 @@
 const { DomainException } = require('../exceptions/DomainException');
 
-/**
- * User Entity - Pure domain object with business logic
- * NO framework dependencies allowed
- */
 class User {
     constructor(username, email, password) {
         this.validateUsername(username);
         this.validateEmail(email);
         this.validatePassword(password);
         
-        this.id = null; // Will be set by repository
+        this.id = null; // cái này repo set
         this.username = username;
         this.email = email.toLowerCase();
-        this.password = password; // Will be hashed by use case
+        this.password = password; // cái này sẽ hash trong usecase
         this.createdAt = new Date();
         this.updatedAt = new Date();
     }
 
-    /**
-     * Reconstruct user from database (skip validation)
-     */
     static reconstruct(id, username, email, hashedPassword, createdAt, updatedAt) {
         const user = Object.create(User.prototype);
         user.id = id;
@@ -32,7 +25,6 @@ class User {
         return user;
     }
 
-    // Business validation methods
     validateUsername(username) {
         if (!username || typeof username !== 'string') {
             throw DomainException.validationError('Username is required');
@@ -70,7 +62,6 @@ class User {
         }
     }
 
-    // Business methods
     updateProfile(username, email) {
         if (username) {
             this.validateUsername(username);
@@ -85,36 +76,17 @@ class User {
 
     changePassword(newPassword) {
         this.validatePassword(newPassword);
-        this.password = newPassword; // Will be hashed by use case
+        this.password = newPassword; //hash trong usecase (phần đổi password chưa làm đâu nhưng để tạm đó đã)
         this.updatedAt = new Date();
     }
 
-    // Getters
-    getId() {
-        return this.id;
-    }
+    getId() { return this.id; }
+    getUsername() { return this.username; }
+    getEmail() { return this.email; }
+    getPassword() { return this.password; }
+    getCreatedAt() { return this.createdAt; }
+    getUpdatedAt() { return this.updatedAt; }
 
-    getUsername() {
-        return this.username;
-    }
-
-    getEmail() {
-        return this.email;
-    }
-
-    getPassword() {
-        return this.password;
-    }
-
-    getCreatedAt() {
-        return this.createdAt;
-    }
-
-    getUpdatedAt() {
-        return this.updatedAt;
-    }
-
-    // For safe serialization (exclude password)
     toPublicObject() {
         return {
             id: this.id,

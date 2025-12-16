@@ -1,32 +1,6 @@
-/**
- * Task Display DTO (Data Transfer Object)
- * Business Layer - Input/Output for GetTaskForDisplay Use Case
- * 
- * Separates internal domain models from external API contracts.
- * Frontend receives this DTO, not raw domain entities.
- * 
- * @author Clean Architecture Team
- * @version 1.0.0
- */
 
 class TaskDisplayDTO {
-    /**
-     * Create task display DTO for API response
-     * @param {Object} params - Task display parameters
-     * @param {string} params.id - Task UUID
-     * @param {string} params.title - Task title
-     * @param {string} params.description - Task description
-     * @param {string} params.status - Task status (SCHEDULED | PENDING | IN_PROGRESS | COMPLETED | FAILED | CANCELLED)
-     * @param {string} params.userId - Owner user ID
-     * @param {string} params.createdAt - ISO 8601 creation timestamp
-     * @param {string} params.updatedAt - ISO 8601 update timestamp
-     * @param {string} params.startDate - ISO 8601 start date
-     * @param {string|null} params.deadline - ISO 8601 deadline or null
-     * @param {number} params.progress - Progress percentage (0-100)
-     * @param {boolean} params.isOverdue - Whether task is overdue
-     * @param {TaskDisplayData} params.displayData - Display data value object
-     * @param {string} params.createdAtFormatted - Formatted creation date
-     */
+
     constructor({
         id,
         title,
@@ -54,7 +28,6 @@ class TaskDisplayDTO {
         this.progress = progress;
         this.isOverdue = isOverdue;
 
-        // Display data (calculated by backend)
         this.statusText = displayData.statusText;
         this.statusClass = displayData.statusClass;
         this.progressColor = displayData.progressColor;
@@ -69,13 +42,8 @@ class TaskDisplayDTO {
         this.icon = displayData.icon;
     }
 
-    /**
-     * Convert to API response format
-     * @returns {Object} Plain object for JSON serialization
-     */
     toJSON() {
         return {
-            // Core task data
             id: this.id,
             title: this.title,
             description: this.description,
@@ -88,7 +56,6 @@ class TaskDisplayDTO {
             progress: this.progress,
             isOverdue: this.isOverdue,
 
-            // Display data (pre-calculated by backend)
             statusText: this.statusText,
             statusClass: this.statusClass,
             progressColor: this.progressColor,

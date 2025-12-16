@@ -7,10 +7,6 @@ const {
 } = require('../../business');
 const { DomainException } = require('../../domain/exceptions/DomainException');
 
-/**
- * Task Controller
- * Adapters layer - HTTP interface for task use cases
- */
 class TaskController {
     constructor(
         createTaskUseCase,
@@ -30,14 +26,10 @@ class TaskController {
         this.getTaskStatisticsUseCase = getTaskStatisticsUseCase;
     }
 
-    /**
-     * POST /api/tasks
-     * Create a new task
-     */
     async createTask(req, res) {
         try {
             const { title, description, startDate, deadline } = req.body;
-            const userId = req.user.userId; // From auth middleware
+            const userId = req.user.userId;
 
             if (!title) {
                 return res.status(400).json({
@@ -46,7 +38,6 @@ class TaskController {
                 });
             }
 
-            // Parse startDate - if not provided or empty, use current datetime
             let parsedStartDate = new Date();
             if (startDate && startDate.trim() !== '') {
                 const tempDate = new Date(startDate);
@@ -55,7 +46,6 @@ class TaskController {
                 }
             }
             
-            // Parse deadline - optional, can be null
             let parsedDeadline = null;
             if (deadline && deadline.trim() !== '') {
                 const tempDate = new Date(deadline);
@@ -92,19 +82,14 @@ class TaskController {
         }
     }
 
-    /**
-     * GET /api/tasks
-     * Get all tasks for the authenticated user
-     */
     async getTasks(req, res) {
         try {
             const userId = req.user.userId;
-            const { status } = req.query; // Optional filter
+            const { status } = req.query;
 
             const inputDTO = new GetTasksInputDTO(userId, status);
             const outputDTO = await this.getTasksUseCase.execute(inputDTO);
 
-            // Transform taskId to id for frontend compatibility
             const tasks = outputDTO.tasks.map(task => ({
                 id: task.taskId,
                 title: task.title,
@@ -130,10 +115,6 @@ class TaskController {
         }
     }
 
-    /**
-     * GET /api/tasks/:id
-     * Get a single task by ID
-     */
     async getTaskById(req, res) {
         try {
             const taskId = req.params.id;
@@ -163,17 +144,12 @@ class TaskController {
         }
     }
 
-    /**
-     * PUT /api/tasks/:id
-     * Update a task
-     */
     async updateTask(req, res) {
         try {
             const taskId = req.params.id;
             const userId = req.user.userId;
             const { title, description, status, startDate, deadline } = req.body;
 
-            // Parse dates properly (same logic as createTask)
             let parsedStartDate = undefined;
             if (startDate && typeof startDate === 'string' && startDate.trim() !== '') {
                 const tempDate = new Date(startDate);
@@ -189,7 +165,7 @@ class TaskController {
                     parsedDeadline = tempDate;
                 }
             } else if (deadline === null || deadline === '') {
-                parsedDeadline = null; // Explicitly set to null to clear deadline
+                parsedDeadline = null;
             }
 
             const inputDTO = new UpdateTaskInputDTO(
@@ -222,10 +198,6 @@ class TaskController {
         }
     }
 
-    /**
-     * DELETE /api/tasks/:id
-     * Delete a task
-     */
     async deleteTask(req, res) {
         try {
             const taskId = req.params.id;
@@ -244,10 +216,6 @@ class TaskController {
         }
     }
 
-    /**
-     * PATCH /api/tasks/:id/status
-     * Change task status
-     */
     async changeStatus(req, res) {
         try {
             const taskId = req.params.id;
@@ -285,10 +253,6 @@ class TaskController {
         }
     }
 
-    /**
-     * GET /api/tasks/statistics
-     * Get task statistics for user
-     */
     async getStatistics(req, res) {
         try {
             const userId = req.user.userId;
@@ -305,9 +269,6 @@ class TaskController {
         }
     }
 
-    /**
-     * Handle errors with appropriate HTTP status codes
-     */
     handleError(res, error) {
         if (error instanceof DomainException) {
             const statusCode = this.getStatusCodeForDomainException(error);
@@ -325,9 +286,6 @@ class TaskController {
         });
     }
 
-    /**
-     * Map domain exception to HTTP status code
-     */
     getStatusCodeForDomainException(exception) {
         const errorCode = exception.getErrorCode();
         switch (errorCode) {

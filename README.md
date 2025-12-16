@@ -56,7 +56,7 @@ CORS_ORIGIN=*
 CREATE DATABASE TaskManager;
 ```
 
-Chạy migration scripts trong `infrastructure/database/schemas/`
+Chạyscripts trong `infrastructure/database/schemas/`
 
 ## 🚀 Chạy Ứng Dụng
 
@@ -253,15 +253,6 @@ Dự án tuân thủ **Clean Architecture** principles:
 - ✅ Repository pattern with ports & adapters
 - ✅ Dependency injection via DIContainer
 
-Xem thêm: [materials/mega-prompt.md](materials/mega-prompt.md)
-
-## 📚 Tài Liệu
-
-- [API Documentation](materials/api-list.txt) - Chi tiết 16 endpoints
-- [Knowledge Base](materials/knowledge.txt) - Lý thuyết áp dụng
-- [Completed Features](materials/completed.txt) - Checklist triển khai
-- [Architecture Guide](materials/mega-prompt.md) - Clean Architecture guide
-
 ## 👨‍💻 Development
 
 ### Project Structure Convention
@@ -287,4 +278,4 @@ MIT License - xem [LICENSE](LICENSE)
 
 ---
 
-**Built with Clean Architecture principles** 🏛️
+**Built with Clean Architecture principles** 

@@ -1,6 +1,4 @@
-/**
- * Input DTO for creating a task
- */
+
 class CreateTaskInputDTO {
     constructor(title, description, userId, startDate = null, deadline = null) {
         this.title = title;
@@ -11,9 +9,6 @@ class CreateTaskInputDTO {
     }
 }
 
-/**
- * Output DTO for created task
- */
 class CreateTaskOutputDTO {
     constructor(taskId, title, description, status, userId, startDate, deadline, createdAt) {
         this.taskId = taskId;

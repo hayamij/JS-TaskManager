@@ -1,6 +1,4 @@
-/**
- * Input DTO for user registration
- */
+
 class RegisterUserInputDTO {
     constructor(username, email, password) {
         this.username = username;
@@ -9,9 +7,6 @@ class RegisterUserInputDTO {
     }
 }
 
-/**
- * Output DTO for successful registration
- */
 class RegisterUserOutputDTO {
     constructor(userId, username, email, createdAt) {
         this.userId = userId;

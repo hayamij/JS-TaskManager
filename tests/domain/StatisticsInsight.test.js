@@ -1,8 +1,3 @@
-/**
- * Test suite for StatisticsInsight Value Object
- * Domain Layer Test
- */
-
 const StatisticsInsight = require('../../domain/valueobjects/StatisticsInsight');
 
 describe('StatisticsInsight Value Object', () => {

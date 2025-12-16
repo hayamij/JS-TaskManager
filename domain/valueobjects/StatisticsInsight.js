@@ -1,26 +1,7 @@
-/**
- * Statistics Insight Value Object
- * Domain Layer - Pure business logic, no dependencies
- * 
- * Represents actionable insights derived from task statistics.
- * Provides context-aware messages to help users understand their task status.
- * 
- * @author Clean Architecture Team
- * @version 1.0.0
- */
 
 class StatisticsInsight {
-    /**
-     * Create immutable statistics insight
-     * @param {Object} params - Insight parameters
-     * @param {string} params.type - Insight type ('success' | 'warning' | 'danger' | 'info')
-     * @param {string} params.message - Human-readable insight message
-     * @param {string} params.icon - Icon/emoji for the insight
-     * @param {number} [params.priority=0] - Priority for sorting insights (higher = more important)
-     * @throws {Error} When required fields are missing or invalid
-     */
+
     constructor({ type, message, icon, priority = 0 }) {
-        // Validate required fields
         if (!type || typeof type !== 'string') {
             throw new Error('type is required and must be a string');
         }
@@ -31,7 +12,6 @@ class StatisticsInsight {
             throw new Error('icon is required and must be a string');
         }
 
-        // Validate enum values
         const validTypes = ['success', 'warning', 'danger', 'info'];
         if (!validTypes.includes(type)) {
             throw new Error(`type must be one of: ${validTypes.join(', ')}`);
@@ -41,7 +21,6 @@ class StatisticsInsight {
             throw new Error('priority must be a non-negative number');
         }
 
-        // Freeze to make immutable
         Object.defineProperties(this, {
             type: { value: type, enumerable: true },
             message: { value: message, enumerable: true },
@@ -52,12 +31,6 @@ class StatisticsInsight {
         Object.freeze(this);
     }
 
-    /**
-     * Factory: Create success insight
-     * @param {string} message - Success message
-     * @param {number} [priority=1] - Priority level
-     * @returns {StatisticsInsight} Insight instance
-     */
     static success(message, priority = 1) {
         return new StatisticsInsight({
             type: 'success',
@@ -67,12 +40,6 @@ class StatisticsInsight {
         });
     }
 
-    /**
-     * Factory: Create warning insight
-     * @param {string} message - Warning message
-     * @param {number} [priority=2] - Priority level
-     * @returns {StatisticsInsight} Insight instance
-     */
     static warning(message, priority = 2) {
         return new StatisticsInsight({
             type: 'warning',
@@ -82,12 +49,6 @@ class StatisticsInsight {
         });
     }
 
-    /**
-     * Factory: Create danger insight
-     * @param {string} message - Danger message
-     * @param {number} [priority=3] - Priority level
-     * @returns {StatisticsInsight} Insight instance
-     */
     static danger(message, priority = 3) {
         return new StatisticsInsight({
             type: 'danger',
@@ -97,12 +58,6 @@ class StatisticsInsight {
         });
     }
 
-    /**
-     * Factory: Create info insight
-     * @param {string} message - Info message
-     * @param {number} [priority=0] - Priority level
-     * @returns {StatisticsInsight} Insight instance
-     */
     static info(message, priority = 0) {
         return new StatisticsInsight({
             type: 'info',
@@ -112,18 +67,6 @@ class StatisticsInsight {
         });
     }
 
-    /**
-     * Generate insights from task statistics
-     * Business logic: Analyze statistics and provide actionable feedback
-     * @param {Object} stats - Statistics object
-     * @param {number} stats.totalTasks - Total number of tasks
-     * @param {number} stats.pendingTasks - Number of pending tasks
-     * @param {number} stats.inProgressTasks - Number of in-progress tasks
-     * @param {number} stats.completedTasks - Number of completed tasks
-     * @param {number} stats.overdueTasks - Number of overdue tasks
-     * @param {number} stats.completionRate - Completion rate percentage
-     * @returns {Array<StatisticsInsight>} Array of insights, sorted by priority (descending)
-     */
     static generateFromStatistics(stats) {
         const insights = [];
         const {
@@ -212,10 +155,6 @@ class StatisticsInsight {
         return insights;
     }
 
-    /**
-     * Convert to plain object for JSON serialization
-     * @returns {Object} Plain object representation
-     */
     toJSON() {
         return {
             type: this.type,

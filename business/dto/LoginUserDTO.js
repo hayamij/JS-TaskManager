@@ -1,6 +1,4 @@
-/**
- * Input DTO for user login
- */
+
 class LoginUserInputDTO {
     constructor(email, password) {
         this.email = email;
@@ -8,9 +6,6 @@ class LoginUserInputDTO {
     }
 }
 
-/**
- * Output DTO for successful login
- */
 class LoginUserOutputDTO {
     constructor(token, user) {
         this.token = token;

@@ -134,44 +134,13 @@
 <a name='L69'></a><a href='#L69'>69</a>
 <a name='L70'></a><a href='#L70'>70</a>
 <a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a>
-<a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a>
-<a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a>
-<a name='L89'></a><a href='#L89'>89</a>
-<a name='L90'></a><a href='#L90'>90</a>
-<a name='L91'></a><a href='#L91'>91</a>
-<a name='L92'></a><a href='#L92'>92</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L72'></a><a href='#L72'>72</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -210,20 +179,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -249,41 +209,30 @@
 const { TaskStatus } = require('../../../domain/valueobjects/TaskStatus');
 const { ChangeTaskStatusInputDTO, ChangeTaskStatusOutputDTO } = require('../../dto/ChangeTaskStatusDTO');
 &nbsp;
-/**
- * Change Task Status Use Case
- * Specialized use case for status transitions with business rules
- */
 class ChangeTaskStatusUseCase {
     constructor(taskRepository) {
         this.taskRepository = taskRepository;
     }
 &nbsp;
-    /**
-     * Execute task status change
-     * @param {string} taskId 
-     * @param {string} newStatus 
-     * @param {string} userId 
-     * @returns {Promise&lt;Object&gt;}
-     */
     async execute(taskId, newStatus, userId) {
-        // Step 1: Validate input
+        //Validate input
         if (!taskId || !newStatus || !userId) {
             throw DomainException.validationError('Task ID, status, and User ID are required');
         }
 &nbsp;
-        // Step 2: Find task
+        //Find task
         const task = await this.taskRepository.findById(taskId);
         
         if (!task) {
             throw DomainException.entityNotFound('Task', taskId);
         }
 &nbsp;
-        // Step 3: Authorization check
+        //Authorization check
         if (!task.belongsToUser(userId)) {
             throw DomainException.unauthorized('You do not have permission to update this task');
         }
 &nbsp;
-        // Step 4: Update status using domain logic (enforces business rules)
+        //Update status using domain logic (enforces business rules)
         try {
             task.updateStatus(newStatus);
         } catch (error) {
@@ -293,30 +242,21 @@ class ChangeTaskStatusUseCase {
 <span class="cstat-no" title="statement not covered" >            throw DomainException.validationError(error.message);</span>
         }
 &nbsp;
-        // Step 5: Persist changes
+        //Persist changes
         const updatedTask = await this.taskRepository.update(task);
 &nbsp;
-        // Step 6: Return result using DTO
+        //Return result using DTO
         return ChangeTaskStatusOutputDTO.fromTask(updatedTask);
     }
 &nbsp;
-    /**
-     * Helper: Mark task as in progress
-     */
 <span class="fstat-no" title="function not covered" >    as</span>ync markAsInProgress(taskId, userId) {
 <span class="cstat-no" title="statement not covered" >        return this.execute(taskId, TaskStatus.IN_PROGRESS, userId);</span>
     }
 &nbsp;
-    /**
-     * Helper: Mark task as completed
-     */
 <span class="fstat-no" title="function not covered" >    as</span>ync markAsCompleted(taskId, userId) {
 <span class="cstat-no" title="statement not covered" >        return this.execute(taskId, TaskStatus.COMPLETED, userId);</span>
     }
 &nbsp;
-    /**
-     * Helper: Reopen task
-     */
 <span class="fstat-no" title="function not covered" >    as</span>ync reopenTask(taskId, userId) {
         const task = <span class="cstat-no" title="statement not covered" >await this.taskRepository.findById(taskId);</span>
         
@@ -343,7 +283,7 @@ module.exports = { ChangeTaskStatusUseCase };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-12-16T13:14:40.192Z
+                at 2025-12-16T13:50:45.212Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

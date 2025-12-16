@@ -1,7 +1,4 @@
-/**
- * Domain Exception - Represents business rule violations
- * Used throughout domain layer for validation and business logic errors
- */
+
 class DomainException extends Error {
     constructor(message, errorCode) {
         super(message);

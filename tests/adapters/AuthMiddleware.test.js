@@ -1,8 +1,3 @@
-/**
- * Test suite for AuthMiddleware
- * Adapters Layer Test
- */
-
 const { AuthMiddleware } = require('../../adapters/middleware/AuthMiddleware');
 
 describe('AuthMiddleware', () => {

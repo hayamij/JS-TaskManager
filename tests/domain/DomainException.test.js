@@ -1,8 +1,3 @@
-/**
- * Test suite for DomainException
- * Domain Layer Test
- */
-
 const { DomainException } = require('../../domain/exceptions/DomainException');
 
 describe('DomainException', () => {

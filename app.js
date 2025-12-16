@@ -31,7 +31,7 @@ class App {
         // Setup error handlers
         this.setupErrorHandlers();
 
-        console.log('✅ Express application initialized');
+        console.log('Express application initialized');
     }
 
     /**
@@ -63,16 +63,12 @@ class App {
         }
     }
 
-    /**
-     * Setup API routes
-     */
     setupRoutes() {
         const authController = this.container.getAuthController();
         const taskController = this.container.getTaskController();
         const taskDisplayController = this.container.getTaskDisplayController();
         const authMiddleware = this.container.getAuthMiddleware();
 
-        // Health check
         this.app.get('/health', (req, res) => {
             res.json({ 
                 success: true, 
@@ -103,11 +99,7 @@ class App {
 
         // Task routes (protected)
         const authenticate = authMiddleware.authenticate();
-        
-        // ==== DISPLAY ROUTES (NEW - frontend logic moved to backend) ====
-        // These endpoints return fully-enriched data for frontend rendering
-        // Frontend receives: formatted dates, localized text, progress colors, insights, etc.
-        
+
         this.app.get('/api/tasks/statistics/display', authenticate, (req, res, next) => 
             taskDisplayController.getStatisticsForDisplay(req, res, next));
         
@@ -116,9 +108,7 @@ class App {
         
         this.app.get('/api/tasks/:id/display', authenticate, (req, res, next) => 
             taskDisplayController.getTaskForDisplay(req, res, next));
-        
-        // ==== ORIGINAL ROUTES (kept for backward compatibility) ====
-        
+
         this.app.get('/api/tasks/statistics', authenticate, (req, res) => 
             taskController.getStatistics(req, res));
         
@@ -149,9 +139,6 @@ class App {
         });
     }
 
-    /**
-     * Setup error handlers
-     */
     setupErrorHandlers() {
         const { ErrorHandlerMiddleware } = require('./adapters/middleware/ErrorHandlerMiddleware');
 
@@ -162,24 +149,18 @@ class App {
         this.app.use(ErrorHandlerMiddleware.handle);
     }
 
-    /**
-     * Start the server
-     */
     start(port = Config.PORT) {
         return new Promise((resolve) => {
             this.server = this.app.listen(port, () => {
-                console.log(`\n🚀 Server is running on port ${port}`);
-                console.log(`📍 Environment: ${Config.NODE_ENV}`);
-                console.log(`🔗 Health check: http://localhost:${port}/health`);
-                console.log(`🔗 API endpoint: http://localhost:${port}/api\n`);
+                console.log(`\nServer is running on port ${port}`);
+                console.log(`Environment: ${Config.NODE_ENV}`);
+                console.log(`Health check: http://localhost:${port}/health`);
+                console.log(`API endpoint: http://localhost:${port}/api\n`);
                 resolve(this.server);
             });
         });
     }
 
-    /**
-     * Stop the server
-     */
     async stop() {
         if (this.server) {
             await new Promise((resolve) => {
@@ -192,19 +173,9 @@ class App {
         console.log('Server stopped');
     }
 
-    /**
-     * Get Express app instance
-     */
-    getApp() {
-        return this.app;
-    }
+    getApp() { return this.app; }
 
-    /**
-     * Get DI container
-     */
-    getContainer() {
-        return this.container;
-    }
+    getContainer() { return this.container; }
 }
 
 module.exports = { App };

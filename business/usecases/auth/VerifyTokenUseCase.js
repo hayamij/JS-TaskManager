@@ -1,38 +1,29 @@
 const { DomainException } = require('../../../domain/exceptions/DomainException');
 const { VerifyTokenInputDTO, VerifyTokenOutputDTO } = require('../../dto/VerifyTokenDTO');
 
-/**
- * Verify Token Use Case
- * Validates JWT token and returns user information
- */
 class VerifyTokenUseCase {
     constructor(tokenService, userRepository) {
         this.tokenService = tokenService;
         this.userRepository = userRepository;
     }
 
-    /**
-     * Execute token verification
-     * @param {string} token 
-     * @returns {Promise<Object>} User payload from token
-     */
     async execute(token) {
-        // Step 1: Validate input
+        //Validate input
         if (!token) {
             throw DomainException.unauthorized('Token is required');
         }
 
         try {
-            // Step 2: Verify and decode token
+            //Verify and decode token
             const payload = await this.tokenService.verify(token);
 
-            // Step 3: Optional - Check if user still exists
+            //Optional - Check if user still exists
             const user = await this.userRepository.findById(payload.userId);
             if (!user) {
                 throw DomainException.unauthorized('User no longer exists');
             }
 
-            // Step 4: Return user information
+            //Return user information
             return {
                 userId: user.getId(),
                 username: user.getUsername(),

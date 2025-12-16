@@ -1,19 +1,13 @@
 const { App } = require('./app');
 
-/**
- * Server Entry Point
- */
 async function main() {
     const app = new App();
 
     try {
-        // Initialize application
         await app.initialize();
 
-        // Start server
         await app.start();
 
-        // Graceful shutdown
         process.on('SIGTERM', async () => {
             console.log('SIGTERM received, shutting down gracefully...');
             await app.stop();
@@ -32,5 +26,4 @@ async function main() {
     }
 }
 
-// Start the server
 main();

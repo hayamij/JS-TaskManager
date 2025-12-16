@@ -1,31 +1,6 @@
-/**
- * Task Display Data Value Object
- * Domain Layer - Pure business logic, no dependencies
- * 
- * Encapsulates all presentation data for a task that frontend needs to render.
- * This keeps display logic OUT of the frontend and IN the backend where it belongs.
- * 
- * @author Clean Architecture Team
- * @version 1.0.0
- */
 
 class TaskDisplayData {
-    /**
-     * Create immutable display data for a task
-     * @param {Object} params - Display data parameters
-     * @param {string} params.statusText - Localized status text (e.g., 'Đang chờ', 'Đang làm', 'Hoàn thành')
-     * @param {string} params.statusClass - CSS class for status styling ('pending' | 'in-progress' | 'completed')
-     * @param {string} params.progressColor - Progress bar color ('safe' | 'warning' | 'danger' | 'completed')
-     * @param {string} params.startDateFormatted - Formatted start date (e.g., '16/12/2025 10:30')
-     * @param {string|null} params.deadlineFormatted - Formatted deadline or null if no deadline
-     * @param {string|null} params.overdueMessage - Overdue message (e.g., 'Quá hạn 2 ngày') or null
-     * @param {Array<string>} params.availableActions - Array of available actions (['edit', 'delete', 'complete'])
-     * @param {boolean} params.canEdit - Whether user can edit this task
-     * @param {boolean} params.canDelete - Whether user can delete this task
-     * @param {boolean} params.canComplete - Whether user can mark as complete
-     * @param {string} params.icon - Icon/emoji for task card (e.g., '📋', '🔄', '✅')
-     * @throws {Error} When required fields are missing or invalid
-     */
+
     constructor({
         statusText,
         statusClass,
@@ -56,7 +31,6 @@ class TaskDisplayData {
             throw new Error('availableActions must be an array');
         }
 
-        // Validate enum values
         const validStatusClasses = ['scheduled', 'pending', 'in-progress', 'completed', 'failed', 'cancelled'];
         if (!validStatusClasses.includes(statusClass)) {
             throw new Error(`statusClass must be one of: ${validStatusClasses.join(', ')}`);
@@ -74,7 +48,6 @@ class TaskDisplayData {
             }
         }
 
-        // Freeze to make immutable
         Object.defineProperties(this, {
             statusText: { value: statusText, enumerable: true },
             statusClass: { value: statusClass, enumerable: true },
@@ -92,12 +65,6 @@ class TaskDisplayData {
         Object.freeze(this);
     }
 
-    /**
-     * Factory method: Create display data for SCHEDULED task (future startDate)
-     * @param {string} startDateFormatted - Formatted start date
-     * @param {string|null} deadlineFormatted - Formatted deadline
-     * @returns {TaskDisplayData} Display data instance
-     */
     static forScheduled(startDateFormatted, deadlineFormatted = null) {
         return new TaskDisplayData({
             statusText: 'Đang chờ',
@@ -114,13 +81,6 @@ class TaskDisplayData {
         });
     }
 
-    /**
-     * Factory method: Create display data for PENDING task
-     * @param {string} startDateFormatted - Formatted start date
-     * @param {string|null} deadlineFormatted - Formatted deadline
-     * @param {string|null} overdueMessage - Overdue message if applicable
-     * @returns {TaskDisplayData} Display data instance
-     */
     static forPending(startDateFormatted, deadlineFormatted = null, overdueMessage = null) {
         return new TaskDisplayData({
             statusText: 'Đang chờ',
@@ -137,14 +97,6 @@ class TaskDisplayData {
         });
     }
 
-    /**
-     * Factory method: Create display data for IN_PROGRESS task
-     * @param {string} startDateFormatted - Formatted start date
-     * @param {string|null} deadlineFormatted - Formatted deadline
-     * @param {number} progress - Progress percentage (0-100)
-     * @param {string|null} overdueMessage - Overdue message if applicable
-     * @returns {TaskDisplayData} Display data instance
-     */
     static forInProgress(startDateFormatted, deadlineFormatted = null, progress = 0, overdueMessage = null) {
         let progressColor = 'safe';
         if (progress >= 80) {
@@ -168,12 +120,6 @@ class TaskDisplayData {
         });
     }
 
-    /**
-     * Factory method: Create display data for COMPLETED task
-     * @param {string} startDateFormatted - Formatted start date
-     * @param {string|null} deadlineFormatted - Formatted deadline
-     * @returns {TaskDisplayData} Display data instance
-     */
     static forCompleted(startDateFormatted, deadlineFormatted = null) {
         return new TaskDisplayData({
             statusText: 'Hoàn thành',
@@ -182,7 +128,7 @@ class TaskDisplayData {
             startDateFormatted,
             deadlineFormatted,
             overdueMessage: null, // Completed tasks can't be overdue
-            availableActions: ['view', 'delete'], // Can't edit or complete again
+            availableActions: ['view', 'delete'],
             canEdit: false,
             canDelete: true,
             canComplete: false,
@@ -190,13 +136,6 @@ class TaskDisplayData {
         });
     }
 
-    /**
-     * Factory method: Create display data for FAILED task
-     * @param {string} startDateFormatted - Formatted start date
-     * @param {string|null} deadlineFormatted - Formatted deadline
-     * @param {string|null} overdueMessage - Overdue message
-     * @returns {TaskDisplayData} Display data instance
-     */
     static forFailed(startDateFormatted, deadlineFormatted = null, overdueMessage = null) {
         return new TaskDisplayData({
             statusText: 'Không hoàn thành',
@@ -205,20 +144,14 @@ class TaskDisplayData {
             startDateFormatted,
             deadlineFormatted,
             overdueMessage,
-            availableActions: ['view', 'delete', 'complete'], // Can complete failed tasks
+            availableActions: ['view', 'delete', 'complete'],
             canEdit: false,
             canDelete: true,
-            canComplete: true, // Allow completing failed tasks
+            canComplete: true,
             icon: '❌'
         });
     }
 
-    /**
-     * Factory method: Create display data for CANCELLED task (soft deleted)
-     * @param {string} startDateFormatted - Formatted start date
-     * @param {string|null} deadlineFormatted - Formatted deadline
-     * @returns {TaskDisplayData} Display data instance
-     */
     static forCancelled(startDateFormatted, deadlineFormatted = null) {
         return new TaskDisplayData({
             statusText: 'Đã hủy',
@@ -227,7 +160,7 @@ class TaskDisplayData {
             startDateFormatted,
             deadlineFormatted,
             overdueMessage: null,
-            availableActions: ['view'], // Can only view cancelled tasks
+            availableActions: ['view'], 
             canEdit: false,
             canDelete: false,
             canComplete: false,
@@ -235,10 +168,6 @@ class TaskDisplayData {
         });
     }
 
-    /**
-     * Convert to plain object for JSON serialization
-     * @returns {Object} Plain object representation
-     */
     toJSON() {
         return {
             statusText: this.statusText,

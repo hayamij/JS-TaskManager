@@ -1,8 +1,3 @@
-/**
- * Test suite for TaskDisplayData Value Object
- * Domain Layer Test
- */
-
 const TaskDisplayData = require('../../domain/valueobjects/TaskDisplayData');
 
 describe('TaskDisplayData Value Object', () => {

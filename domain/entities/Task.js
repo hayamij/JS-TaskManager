@@ -1,17 +1,13 @@
 const { DomainException } = require('../exceptions/DomainException');
 const { TaskStatus } = require('../valueobjects/TaskStatus');
 
-/**
- * Task Entity - Pure domain object with business logic
- * NO framework dependencies allowed
- */
 class Task {
     constructor(title, description, userId, startDate = null, deadline = null) {
         this.validateTitle(title);
         this.validateUserId(userId);
         
-        // startDate is required - if not provided or invalid, use current datetime
         let effectiveStartDate = new Date();
+
         if (startDate) {
             const tempDate = new Date(startDate);
             if (!isNaN(tempDate.getTime())) {
@@ -19,33 +15,28 @@ class Task {
             }
         }
         
-        // Validate deadline if provided
         if (deadline) {
             this.validateDeadline(deadline, effectiveStartDate);
         }
         
-        this.id = null; // Will be set by repository
+        this.id = null;
         this.title = title.trim();
         this.description = description ? description.trim() : '';
         
-        // Business logic: Determine initial status based on startDate
         const now = new Date();
         if (effectiveStartDate > now) {
-            this.status = TaskStatus.SCHEDULED; // Future task
+            this.status = TaskStatus.SCHEDULED; // task tương lai
         } else {
-            this.status = TaskStatus.PENDING; // Current or past task
+            this.status = TaskStatus.PENDING; // task hiện tại hoặc quá khứ 
         }
         
         this.userId = userId;
         this.startDate = effectiveStartDate;
-        this.deadline = deadline; // Can be null
+        this.deadline = deadline; // ?null cũng được, có những task không có deadline
         this.createdAt = new Date();
         this.updatedAt = new Date();
     }
 
-    /**
-     * Reconstruct task from database (skip validation)
-     */
     static reconstruct(id, title, description, status, userId, startDate, deadline, createdAt, updatedAt) {
         const task = Object.create(Task.prototype);
         task.id = id;
@@ -60,7 +51,6 @@ class Task {
         return task;
     }
 
-    // Business validation methods
     validateTitle(title) {
         if (!title || typeof title !== 'string') {
             throw DomainException.validationError('Task title is required');
@@ -103,7 +93,6 @@ class Task {
         }
     }
 
-    // Business methods
     updateTitle(newTitle) {
         this.validateTitle(newTitle);
         this.title = newTitle.trim();
@@ -132,8 +121,6 @@ class Task {
             );
         }
         
-        // Business rule: FAILED task can be completed (late completion allowed)
-        // Business rule: Cannot manually set to CANCELLED (use delete/cancel method)
         if (newStatus === TaskStatus.CANCELLED) {
             throw DomainException.businessRuleViolation(
                 'Cannot manually set task to CANCELLED. Use cancelTask() method instead.'
@@ -260,73 +247,38 @@ class Task {
         return this.status === TaskStatus.CANCELLED;
     }
 
-    // Business method: Check if task should be auto-marked as failed
     shouldBeMarkedAsFailed() {
-        // Only mark as failed if:
-        // 1. Has a deadline
-        // 2. Not already completed, failed, or cancelled
-        // 3. Deadline has passed
-        if (!this.deadline) return false;
-        if (this.status === TaskStatus.COMPLETED) return false;
-        if (this.status === TaskStatus.FAILED) return false;
-        if (this.status === TaskStatus.CANCELLED) return false;
-        return new Date() > new Date(this.deadline);
+        if (!this.deadline) return false; // không có deadline nên không thất bại được
+        if (this.status === TaskStatus.COMPLETED) return false; // đã hoàn thành
+        if (this.status === TaskStatus.FAILED) return false; // đã thất bại
+        if (this.status === TaskStatus.CANCELLED) return false; // đã hủy
+        return new Date() > new Date(this.deadline); // trễ deadline
     }
 
-    // Business method: Check if task should transition from SCHEDULED to PENDING
     shouldTransitionToPending() {
         if (this.status !== TaskStatus.SCHEDULED) return false;
         const now = new Date();
         return new Date(this.startDate) <= now;
     }
 
-    // Business method: Cancel/delete task (soft delete)
     cancelTask() {
         if (this.status === TaskStatus.CANCELLED) {
-            return; // Already cancelled
+            return;
         }
         this.status = TaskStatus.CANCELLED;
         this.updatedAt = new Date();
     }
 
-    // Getters
-    getId() {
-        return this.id;
-    }
+    getId() { return this.id; }
+    getTitle() { return this.title; }
+    getDescription() { return this.description; }
+    getStatus() { return this.status; }
+    getUserId() { return this.userId; }
+    getCreatedAt() { return this.createdAt; }
+    getUpdatedAt() { return this.updatedAt; }
+    getStartDate() { return this.startDate; }
+    getDeadline() { return this.deadline; }
 
-    getTitle() {
-        return this.title;
-    }
-
-    getDescription() {
-        return this.description;
-    }
-
-    getStatus() {
-        return this.status;
-    }
-
-    getUserId() {
-        return this.userId;
-    }
-
-    getCreatedAt() {
-        return this.createdAt;
-    }
-
-    getUpdatedAt() {
-        return this.updatedAt;
-    }
-
-    getStartDate() {
-        return this.startDate;
-    }
-
-    getDeadline() {
-        return this.deadline;
-    }
-
-    // Business method: Calculate progress based on time
     getProgressPercentage() {
         if (!this.deadline) return null;
         
@@ -347,7 +299,6 @@ class Task {
         return Math.round((elapsedTime / totalTime) * 100);
     }
 
-    // Business method: Check if task is overdue
     isOverdue() {
         if (!this.deadline || this.status === TaskStatus.COMPLETED) {
             return false;
@@ -355,7 +306,6 @@ class Task {
         return new Date() > new Date(this.deadline);
     }
 
-    // For serialization
     toObject() {
         return {
             id: this.id,

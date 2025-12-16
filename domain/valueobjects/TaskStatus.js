@@ -1,7 +1,3 @@
-/**
- * TaskStatus Value Object - Immutable status enumeration
- * Represents the lifecycle states of a task
- */
 class TaskStatus {
     static SCHEDULED = 'SCHEDULED'; // Task scheduled for future (startDate in future)
     static PENDING = 'PENDING';

@@ -1,38 +1,17 @@
 const sql = require('mssql');
 
-/**
- * SQL Server Task Table Queries
- * Infrastructure layer - Framework-specific implementation
- */
 class TaskModel {
-    /**
-     * Task table structure:
-     * - id: UNIQUEIDENTIFIER (Primary Key)
-     * - user_id: UNIQUEIDENTIFIER (Foreign Key to Users)
-     * - title: NVARCHAR(200)
-     * - description: NVARCHAR(1000)
-     * - status: NVARCHAR(20) (SCHEDULED, PENDING, IN_PROGRESS, COMPLETED, FAILED, CANCELLED)
-     * - start_date: DATETIME2
-     * - deadline: DATETIME2
-     * - created_at: DATETIME2
-     * - updated_at: DATETIME2
-     */
 
     static TABLE_NAME = 'Tasks';
 
-    /**
-     * Create a new task
-     */
     static async create(pool, { user_id, title, description, status = 'PENDING', start_date, deadline }) {
         const request = pool.request();
         
-        // Validate and fallback for start_date
         let effectiveStartDate = start_date;
         if (!start_date || !(start_date instanceof Date) || isNaN(start_date.getTime())) {
             effectiveStartDate = new Date();
         }
         
-        // Validate deadline if provided
         let effectiveDeadline = null;
         if (deadline && deadline instanceof Date && !isNaN(deadline.getTime())) {
             effectiveDeadline = deadline;
@@ -53,9 +32,6 @@ class TaskModel {
         return result.recordset[0];
     }
 
-    /**
-     * Find task by ID
-     */
     static async findById(pool, id) {
         const request = pool.request();
         const result = await request
@@ -64,9 +40,6 @@ class TaskModel {
         return result.recordset[0] || null;
     }
 
-    /**
-     * Find tasks by user ID
-     */
     static async findByUserId(pool, userId) {
         const request = pool.request();
         const result = await request
@@ -79,9 +52,6 @@ class TaskModel {
         return result.recordset;
     }
 
-    /**
-     * Find tasks by user ID and status
-     */
     static async findByUserIdAndStatus(pool, userId, status) {
         const request = pool.request();
         const result = await request
@@ -95,9 +65,6 @@ class TaskModel {
         return result.recordset;
     }
 
-    /**
-     * Update task
-     */
     static async update(pool, id, { title, description, start_date, deadline }) {
         const request = pool.request();
         
@@ -136,9 +103,6 @@ class TaskModel {
         return await this.findById(pool, id);
     }
 
-    /**
-     * Update task status
-     */
     static async updateStatus(pool, id, status) {
         const request = pool.request();
         // UPDATE without OUTPUT due to trigger conflict
@@ -155,9 +119,6 @@ class TaskModel {
         return await this.findById(pool, id);
     }
 
-    /**
-     * Delete task
-     */
     static async delete(pool, id) {
         const request = pool.request();
         await request
@@ -165,9 +126,6 @@ class TaskModel {
             .query(`DELETE FROM ${this.TABLE_NAME} WHERE id = @id`);
     }
 
-    /**
-     * Delete all tasks by user ID
-     */
     static async deleteByUserId(pool, userId) {
         const request = pool.request();
         await request
@@ -175,9 +133,6 @@ class TaskModel {
             .query(`DELETE FROM ${this.TABLE_NAME} WHERE user_id = @userId`);
     }
 
-    /**
-     * Count tasks by user ID and status
-     */
     static async countByUserIdAndStatus(pool, userId, status) {
         const request = pool.request();
         const result = await request
@@ -190,9 +145,6 @@ class TaskModel {
         return result.recordset[0].count;
     }
 
-    /**
-     * Get statistics for user
-     */
     static async getStatistics(pool, userId) {
         const request = pool.request();
         const result = await request

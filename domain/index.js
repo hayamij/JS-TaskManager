@@ -1,6 +1,3 @@
-// Domain Layer Exports
-// Pure business entities - NO framework dependencies
-
 module.exports = {
     // Entities
     User: require('./entities/User').User,

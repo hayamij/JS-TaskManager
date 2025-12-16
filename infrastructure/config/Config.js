@@ -1,12 +1,7 @@
 const dotenv = require('dotenv');
 
-// Load environment variables
 dotenv.config();
 
-/**
- * Configuration Manager
- * Infrastructure layer
- */
 class Config {
     static get PORT() {
         return process.env.PORT || 3000;

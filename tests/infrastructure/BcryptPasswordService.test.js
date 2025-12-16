@@ -1,8 +1,3 @@
-/**
- * Test suite for BcryptPasswordService
- * Infrastructure Layer Test
- */
-
 const { BcryptPasswordService } = require('../../infrastructure/security/BcryptPasswordService');
 
 describe('BcryptPasswordService', () => {

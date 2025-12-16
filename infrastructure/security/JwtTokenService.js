@@ -1,10 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { TokenService } = require('../../business/ports/TokenService');
 
-/**
- * JWT Token Service Implementation
- * Infrastructure layer - implements TokenService port
- */
 class JwtTokenService extends TokenService {
     constructor(secret, expiresIn = '1d') {
         super();
@@ -15,9 +11,6 @@ class JwtTokenService extends TokenService {
         this.expiresIn = expiresIn;
     }
 
-    /**
-     * Generate a JWT token
-     */
     async generate(payload) {
         if (!payload) {
             throw new Error('Payload is required for token generation');
@@ -28,9 +21,6 @@ class JwtTokenService extends TokenService {
         });
     }
 
-    /**
-     * Verify and decode a JWT token
-     */
     async verify(token) {
         if (!token) {
             throw new Error('Token is required for verification');
@@ -49,9 +39,6 @@ class JwtTokenService extends TokenService {
         }
     }
 
-    /**
-     * Decode token without verification
-     */
     decode(token) {
         if (!token) {
             return null;

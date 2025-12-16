@@ -1,6 +1,4 @@
-/**
- * Input DTO for updating a task
- */
+
 class UpdateTaskInputDTO {
     constructor(taskId, title, description, status, userId, startDate = undefined, deadline = undefined) {
         this.taskId = taskId;
@@ -13,9 +11,6 @@ class UpdateTaskInputDTO {
     }
 }
 
-/**
- * Output DTO for updated task
- */
 class UpdateTaskOutputDTO {
     constructor(taskId, title, description, status, userId, startDate, deadline, updatedAt) {
         this.taskId = taskId;

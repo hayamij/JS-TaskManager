@@ -1,6 +1,4 @@
-/**
- * Input DTO for changing task status
- */
+
 class ChangeTaskStatusInputDTO {
     constructor(taskId, userId, status) {
         this.taskId = taskId;
@@ -9,9 +7,6 @@ class ChangeTaskStatusInputDTO {
     }
 }
 
-/**
- * Output DTO for changed task status
- */
 class ChangeTaskStatusOutputDTO {
     constructor(taskId, title, description, status, userId, startDate, deadline, progress, isOverdue, updatedAt) {
         this.taskId = taskId;

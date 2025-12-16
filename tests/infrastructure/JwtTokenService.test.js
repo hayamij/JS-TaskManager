@@ -1,8 +1,3 @@
-/**
- * Test suite for JwtTokenService
- * Infrastructure Layer Test
- */
-
 const { JwtTokenService } = require('../../infrastructure/security/JwtTokenService');
 const jwt = require('jsonwebtoken');
 
