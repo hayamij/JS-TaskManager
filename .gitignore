@@ -1,3 +1,4 @@
 materials/
 node_modules
 coverage/
+.env
