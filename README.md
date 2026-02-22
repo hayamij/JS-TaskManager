@@ -1,15 +1,19 @@
-# 📋 JS-TaskManager
+Here's the full README translated to English, with icons removed:
+
+---
+
+# JS-TaskManager
 
 **Task Management System with Clean Architecture** - Node.js + Express + SQL Server
 
-## 📦 Cài Đặt
+## Installation
 
-### Yêu cầu hệ thống
-- Node.js 16+ 
+### System Requirements
+- Node.js 16+
 - SQL Server 2019+
-- npm hoặc yarn
+- npm or yarn
 
-### Các bước cài đặt
+### Installation Steps
 
 1. **Clone repository**
 ```bash
@@ -17,17 +21,17 @@ git clone https://github.com/hayamij/JS-TaskManager.git
 cd JS-TaskManager
 ```
 
-2. **Cài đặt dependencies**
+2. **Install dependencies**
 ```bash
 npm install
 ```
 
-3. **Cấu hình môi trường**
+3. **Configure environment**
 ```bash
 cp .env.example .env
 ```
 
-Chỉnh sửa file `.env`:
+Edit the `.env` file:
 ```env
 # Server
 PORT=3000
@@ -51,16 +55,16 @@ BCRYPT_SALT_ROUNDS=10
 CORS_ORIGIN=*
 ```
 
-4. **Tạo database** (SQL Server)
+4. **Create database** (SQL Server)
 ```sql
 CREATE DATABASE TaskManager;
 ```
 
-Chạyscripts trong `infrastructure/database/schemas/`
+Run scripts in `infrastructure/database/schemas/`
 
-## 🚀 Chạy Ứng Dụng
+## Running the Application
 
-### Development mode (với nodemon)
+### Development mode (with nodemon)
 ```bash
 npm run dev
 ```
@@ -72,32 +76,32 @@ npm start
 
 ### Testing
 ```bash
-# Chạy tất cả tests
+# Run all tests
 npm test
 
-# Chạy tests với watch mode
+# Run tests with watch mode
 npm run test:watch
 
-# Chạy unit tests only
+# Run unit tests only
 npm run test:unit
 
-# Chạy integration tests only
+# Run integration tests only
 npm run test:integration
 ```
 
-Server sẽ chạy tại: `http://localhost:3000`
+Server will run at: `http://localhost:3000`
 
-## 🐳 Docker Deployment
+## Docker Deployment
 
 ### Quick Start
 ```bash
-# Build và start containers
+# Build and start containers
 docker-compose up -d --build
 
-# Đợi SQL Server ready (30s)
+# Wait for SQL Server to be ready (30s)
 timeout /t 30
 
-# Khởi tạo database với dữ liệu mẫu
+# Initialize database with sample data
 docker cp docker-init.sql taskmanager-sqlserver:/tmp/
 docker exec taskmanager-sqlserver /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "YourStrong@Passw0rd" -i /tmp/docker-init.sql -C
 
@@ -122,7 +126,7 @@ docker-compose logs -f app
 docker-compose restart app
 ```
 
-## 🏗️ Cấu Trúc Dự Án
+## Project Structure
 
 ### Clean Architecture - 4 Layers
 
@@ -166,9 +170,9 @@ docker-compose restart app
 ```
 Infrastructure → Adapters → Business → Domain
 ```
-Mỗi layer chỉ phụ thuộc vào layer bên trong (Dependency Rule).
+Each layer only depends on the layer inside it (Dependency Rule).
 
-## 📊 Thống Kê Dự Án
+## Project Statistics
 
 | Metric | Count |
 |--------|-------|
@@ -199,14 +203,14 @@ Security Services        97.05%     95.00%   100.00%    97.05%
 ─────────────────────────────────────────────────────────────
 ```
 
-### Phân tích theo layer:
+### Layer Breakdown
 - **Domain**: 5 entities/value objects, 1 exception class
 - **Business**: 13 use cases, 11 DTOs, 4 ports
 - **Adapters**: 3 controllers, 2 repositories, 2 middleware
 - **Infrastructure**: Database, JWT, Bcrypt services
 - **Tests**: 7 domain, 11 use case, 7 adapter/infra tests
 
-## 🔐 Tính Năng
+## Features
 
 ### Authentication
 - ✅ JWT-based authentication
@@ -227,7 +231,7 @@ Security Services        97.05%     95.00%   100.00%    97.05%
 - ✅ Actionable insights
 - ✅ Permission checks per task
 
-## 🔗 API Endpoints
+## API Endpoints
 
 ### Public
 - `GET /health` - Health check
@@ -249,9 +253,9 @@ Security Services        97.05%     95.00%   100.00%    97.05%
 - `GET /api/tasks/display` - Tasks with display data
 - `GET /api/tasks/:id/display` - Task with display data
 
-Xem chi tiết: [materials/api-list.txt](materials/api-list.txt)
+See details: [materials/api-list.txt](materials/api-list.txt)
 
-## 🧪 Testing
+## Testing
 
 Tests cover:
 - ✅ Domain logic validation
@@ -265,10 +269,10 @@ Tests cover:
 **Run coverage report:**
 ```bash
 npm test
-# Xem report: coverage/lcov-report/index.html
+# View report: coverage/lcov-report/index.html
 ```
 
-## 🛡️ Security
+## Security
 
 - **Helmet**: Security headers
 - **CORS**: Configurable cross-origin access
@@ -278,9 +282,9 @@ npm test
 - **Input validation**: Domain-level validation
 - **No secrets in code**: Environment variables only
 
-## 🏛️ Kiến Trúc
+## Architecture
 
-Dự án tuân thủ **Clean Architecture** principles:
+The project adheres to **Clean Architecture** principles:
 - ✅ Dependency Rule (inward dependencies only)
 - ✅ Framework-independent domain logic
 - ✅ Testable business logic
@@ -288,7 +292,7 @@ Dự án tuân thủ **Clean Architecture** principles:
 - ✅ Repository pattern with ports & adapters
 - ✅ Dependency injection via DIContainer
 
-## 👨‍💻 Development
+## Development
 
 ### Project Structure Convention
 - **PascalCase**: Classes, Entities, DTOs
@@ -302,15 +306,15 @@ Dự án tuân thủ **Clean Architecture** principles:
 - Controllers handle HTTP only
 - Repositories behind interfaces
 
-## 📄 License
+## License
 
-MIT License - xem [LICENSE](LICENSE)
+MIT License - see [LICENSE](LICENSE)
 
-## 🔗 Links
+## Links
 
 - Repository: [https://github.com/hayamij/JS-TaskManager](https://github.com/hayamij/JS-TaskManager)
 - Issues: [https://github.com/hayamij/JS-TaskManager/issues](https://github.com/hayamij/JS-TaskManager/issues)
 
 ---
 
-**Built with Clean Architecture principles** 
+**Built with Clean Architecture principles**
