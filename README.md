@@ -1,7 +1,3 @@
-Here's the full README translated to English, with icons removed:
-
----
-
 # JS-TaskManager
 
 **Task Management System with Clean Architecture** - Node.js + Express + SQL Server
