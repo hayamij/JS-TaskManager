@@ -310,7 +310,3 @@ MIT License - see [LICENSE](LICENSE)
 
 - Repository: [https://github.com/hayamij/JS-TaskManager](https://github.com/hayamij/JS-TaskManager)
 - Issues: [https://github.com/hayamij/JS-TaskManager/issues](https://github.com/hayamij/JS-TaskManager/issues)
-
----
-
-**Built with Clean Architecture principles**
