@@ -122,46 +122,6 @@ docker-compose logs -f app
 docker-compose restart app
 ```
 
-## Project Structure
-
-### Clean Architecture - 4 Layers
-
-```
-├── domain/                    # Layer 1: Business Entities
-│   ├── entities/              # User, Task (pure domain objects)
-│   ├── valueobjects/          # TaskStatus, TaskDisplayData
-│   └── exceptions/            # DomainException
-│
-├── business/                  # Layer 2: Business Logic
-│   ├── dto/                   # Data Transfer Objects
-│   ├── ports/                 # Interfaces (UserRepository, TaskRepository)
-│   └── usecases/              # Use Case implementations
-│       ├── auth/              # Register, Login, VerifyToken
-│       └── tasks/             # CRUD operations, statistics
-│
-├── adapters/                  # Layer 3: Interface Adapters
-│   ├── controllers/           # HTTP request handlers
-│   ├── repositories/          # SQL repository implementations
-│   └── middleware/            # Auth, Error handling
-│
-├── infrastructure/            # Layer 4: Frameworks & Drivers
-│   ├── database/              # SQL Server connection & models
-│   ├── security/              # JWT, Bcrypt implementations
-│   └── config/                # Environment configuration
-│
-├── public/                    # Frontend files
-│   ├── js/                    # API client, Dashboard logic
-│   ├── css/                   # Styles
-│   └── *.html                 # Pages
-│
-└── tests/                     # Test suites
-    ├── domain/                # Domain entity tests
-    ├── business/              # Use case tests
-    ├── adapters/              # Controller & repo tests
-    ├── infrastructure/        # Service tests
-    └── integration/           # E2E tests
-```
-
 ### Dependency Flow
 ```
 Infrastructure → Adapters → Business → Domain
