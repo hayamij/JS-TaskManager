@@ -1,272 +1,125 @@
 # JS-TaskManager
 
-**Task Management System with Clean Architecture** - Node.js + Express + SQL Server
+Task management system with Clean Architecture: Node.js + Express + SQL Server, including JWT auth, task lifecycle APIs, and display-focused task endpoints.
 
-## Installation
+## 1) About project
 
-### System Requirements
-- Node.js 16+
-- SQL Server 2019+
-- npm or yarn
+- Focus: authentication, task CRUD, status transitions, statistics, and display-ready task views.
+- Runtime: REST API with static frontend pages served from `public`.
+- Layering: Domain, Business, Adapters, Infrastructure.
 
-### Installation Steps
+## 2) Tech stack
 
-1. **Clone repository**
-```bash
-git clone https://github.com/hayamij/JS-TaskManager.git
-cd JS-TaskManager
-```
+| Frontend | Backend API | Security | Database | Testing | Tooling |
+|---|---|---|---|---|---|
+| HTML, CSS, vanilla JavaScript | Node.js, Express 5 | JWT, bcrypt, helmet, CORS | Microsoft SQL Server (`mssql`) | Jest, Supertest | Nodemon, Docker, npm scripts |
 
-2. **Install dependencies**
+## 3) Quick setup
+
+- Prerequisites: Node.js 16+, SQL Server 2019+, npm.
+- Install:
+
 ```bash
 npm install
 ```
 
-3. **Configure environment**
-```bash
-cp .env.example .env
-```
+- Database reset + seed: run `infrastructure/database/schemas/database-setup.sql` in SSMS. The script recreates `TaskManager`, creates schema objects, and inserts sample data.
+- Environment: copy `.env.example` to `.env` and adjust values if needed.
 
-Edit the `.env` file:
 ```env
-# Server
 PORT=3000
 NODE_ENV=development
-
-# Database
+DB_USER=sa
+DB_PASSWORD=YourStrongPassword123!
 DB_SERVER=localhost
 DB_DATABASE=TaskManager
-DB_USER=sa
-DB_PASSWORD=your_password
 DB_PORT=1433
-DB_ENCRYPT=false
+DB_ENCRYPT=true
 DB_TRUST_SERVER_CERTIFICATE=true
-
-# JWT
-JWT_SECRET=your-secret-key-here
-JWT_EXPIRES_IN=1d
-
-# Security
+JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+JWT_EXPIRES_IN=24h
 BCRYPT_SALT_ROUNDS=10
 CORS_ORIGIN=*
 ```
 
-4. **Create database** (SQL Server)
-```sql
-CREATE DATABASE TaskManager;
-```
+- Run commands:
 
-Run scripts in `infrastructure/database/schemas/`
-
-## Running the Application
-
-### Development mode (with nodemon)
 ```bash
-npm run dev
-```
-
-### Production mode
-```bash
-npm start
-```
-
-### Testing
-```bash
-# Run all tests
-npm test
-
-# Run tests with watch mode
+npm run dev          # development
+npm start            # production
+npm test             # all tests + coverage
 npm run test:watch
-
-# Run unit tests only
 npm run test:unit
-
-# Run integration tests only
 npm run test:integration
 ```
 
-Server will run at: `http://localhost:3000`
+App URL: `http://localhost:3000`
 
-## Docker Deployment
+## 4) Docker quick start
 
-### Quick Start
 ```bash
-# Build and start containers
 docker-compose up -d --build
-
-# Wait for SQL Server to be ready (30s)
-timeout /t 30
-
-# Initialize database with sample data
 docker cp docker-init.sql taskmanager-sqlserver:/tmp/
 docker exec taskmanager-sqlserver /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "YourStrong@Passw0rd" -i /tmp/docker-init.sql -C
-
-# Restart app
 docker-compose restart app
 ```
 
-### Credentials
-- **App user**: `fuongtuan` / `toilabanhmochi`
-- **SA account**: `sa` / `YourStrong@Passw0rd`
-- **Test users**: password `password123`
+- SQL Server account: `sa` / `YourStrong@Passw0rd`
+- Seed test users in DB script use password: `password123`
 
-### Useful Commands
-```bash
-# Stop containers
-docker-compose down
+## 5) Architecture and patterns
 
-# View logs
-docker-compose logs -f app
+- Clean architecture layout:
+	- Domain: `domain` (entities, value objects, exceptions)
+	- Business: `business` (use cases, DTOs, ports)
+	- Adapters: `adapters` (controllers, middleware, repositories)
+	- Infrastructure: `infrastructure` (DB/config/security/routes)
+- Dependency direction: `Infrastructure -> Adapters -> Business -> Domain`.
+- Patterns: use-case interactor, repository + port interfaces, controller adapters, dependency injection via `DIContainer.js`.
 
-# Restart app only
-docker-compose restart app
-```
+## 6) Source inventory (snapshot)
 
-### Dependency Flow
-```
-Infrastructure → Adapters → Business → Domain
-```
-Each layer only depends on the layer inside it (Dependency Rule).
+Snapshot date: 2026-04-08
 
-## Project Statistics
+| Area | Files | Lines | Details |
+|---|---:|---:|---|
+| JS code volume | 84 | 8,811 | Source 59 / 4,379; Test 25 / 4,432 |
+| Repository footprint (tracked files) | 101 | 11,273 | `package.json` dependencies/devDependencies: 7 / 3; npm scripts: 6 |
+| Architecture components | - | - | Entities 2; Value objects 3; Exceptions 1; Use cases 13; DTOs 11; Ports 4; Controllers 3; Repositories 2; Middleware 2 |
+| Layer JS distribution | - | - | Domain 7; Business 29; Adapters 7; Infrastructure 7; Public JS 5 |
+| Database script scale | - | - | CREATE TABLE 2; CREATE INDEX 7; CREATE TRIGGER 2; CREATE PROCEDURE 1; INSERT INTO 4 |
 
-| Metric | Count |
-|--------|-------|
-| **Total Files** | 86 JavaScript files |
-| **Source Files** | 61 files (production code) |
-| **Test Files** | 25 test suites |
-| **Test Cases** | **450 tests** (446 passed, 4 skipped) |
-| **Source Lines** | 5,952 lines |
-| **Test Lines** | 4,505 lines |
-| **Total Lines** | ~10,500 lines |
-| **Endpoints** | 16 REST APIs |
+| API surface | Count | Notes |
+|---|---:|---|
+| Total routes | 16 | Defined in `app.js` |
+| Public routes | 6 | System + auth endpoints |
+| Protected routes | 10 | Task and display endpoints (JWT middleware) |
+| HTTP method split | GET 9, POST 4, PUT 1, PATCH 1, DELETE 1 | |
 
-### Code Coverage (Jest)
-```
-─────────────────────────────────────────────────────────────
-File                    % Stmts   % Branch   % Funcs   % Lines
-─────────────────────────────────────────────────────────────
-All files                75.09%     72.51%    74.82%    75.52%
-─────────────────────────────────────────────────────────────
-Controllers              82.92%     79.36%    82.60%    82.82%
-Middleware               89.79%     82.50%    88.88%    89.79%
-Repositories             80.82%     50.00%    87.50%    80.28%
-Use Cases (auth)        100.00%    100.00%   100.00%   100.00%
-Use Cases (tasks)        88.34%     89.83%    82.35%    88.34%
-Domain Entities          91.70%     84.73%    94.23%    92.78%
-Value Objects            96.15%     88.99%   100.00%    96.11%
-Security Services        97.05%     95.00%   100.00%    97.05%
-─────────────────────────────────────────────────────────────
-```
+## 7) API groups
 
-### Layer Breakdown
-- **Domain**: 5 entities/value objects, 1 exception class
-- **Business**: 13 use cases, 11 DTOs, 4 ports
-- **Adapters**: 3 controllers, 2 repositories, 2 middleware
-- **Infrastructure**: Database, JWT, Bcrypt services
-- **Tests**: 7 domain, 11 use case, 7 adapter/infra tests
+| Group | Endpoints |
+|---|---|
+| System | `GET /health`, `GET /api` |
+| Auth | `POST /api/auth/register`, `POST /api/auth/login`, `POST /api/auth/logout`, `GET /api/auth/me` |
+| Tasks (protected) | `GET /api/tasks`, `GET /api/tasks/:id`, `POST /api/tasks`, `PUT /api/tasks/:id`, `DELETE /api/tasks/:id`, `PATCH /api/tasks/:id/status`, `GET /api/tasks/statistics` |
+| Display (protected) | `GET /api/tasks/display`, `GET /api/tasks/:id/display`, `GET /api/tasks/statistics/display` |
 
-## Features
+## 8) Testing and quality
 
-### Authentication
-- ✅ JWT-based authentication
-- ✅ Bcrypt password hashing (10 salt rounds)
-- ✅ Token verification middleware
-- ✅ Protected routes
+- Test suites by folder: domain 6, business/usecases 11, adapters 5, infrastructure 2, integration 1.
+- Coverage output (after `npm test`): `coverage/lcov-report/index.html`.
+- Security controls: helmet headers, CORS policy, JWT auth, bcrypt password hashing, parameterized SQL via `mssql`.
 
-### Task Management
-- ✅ CRUD operations (Create, Read, Update, Delete)
-- ✅ Task status: PENDING → IN_PROGRESS → COMPLETED
-- ✅ Deadline tracking with overdue detection
-- ✅ Progress calculation
-- ✅ Task statistics with insights
+## 9) Demo credentials (seed)
 
-### Display Endpoints (Frontend-ready)
-- ✅ Enriched data: formatted dates, localized text
-- ✅ Vietnamese localization
-- ✅ Actionable insights
-- ✅ Permission checks per task
+- Seed users from DB script: `johndoe`, `janedoe`, `testuser`, `hayami`.
+- Default user password: `password123`.
+- Example login: `john.doe@example.com` / `password123`.
+- Docker SQL admin: `sa` / `YourStrong@Passw0rd`.
 
-## API Endpoints
+## 10) License and links
 
-### Public
-- `GET /health` - Health check
-- `GET /api` - API information
-- `POST /api/auth/register` - Register user
-- `POST /api/auth/login` - Login
-- `POST /api/auth/logout` - Logout
-- `GET /api/auth/me` - Get current user
-
-### Protected (require JWT)
-- `GET /api/tasks/statistics` - Get statistics
-- `POST /api/tasks` - Create task
-- `GET /api/tasks` - Get all tasks (filter by status)
-- `GET /api/tasks/:id` - Get task by ID
-- `PUT /api/tasks/:id` - Update task
-- `DELETE /api/tasks/:id` - Delete task
-- `PATCH /api/tasks/:id/status` - Change status
-- `GET /api/tasks/statistics/display` - Statistics with insights
-- `GET /api/tasks/display` - Tasks with display data
-- `GET /api/tasks/:id/display` - Task with display data
-
-See details: [materials/api-list.txt](materials/api-list.txt)
-
-## Testing
-
-Tests cover:
-- ✅ Domain logic validation
-- ✅ Business rules enforcement
-- ✅ Use case orchestration
-- ✅ Repository operations
-- ✅ API integration
-- ✅ Authentication flows
-- ✅ Error handling
-
-**Run coverage report:**
-```bash
-npm test
-# View report: coverage/lcov-report/index.html
-```
-
-## Security
-
-- **Helmet**: Security headers
-- **CORS**: Configurable cross-origin access
-- **JWT**: Stateless authentication
-- **Bcrypt**: Strong password hashing
-- **Prepared statements**: SQL injection prevention
-- **Input validation**: Domain-level validation
-- **No secrets in code**: Environment variables only
-
-## Architecture
-
-The project adheres to **Clean Architecture** principles:
-- ✅ Dependency Rule (inward dependencies only)
-- ✅ Framework-independent domain logic
-- ✅ Testable business logic
-- ✅ Replaceable infrastructure
-- ✅ Repository pattern with ports & adapters
-- ✅ Dependency injection via DIContainer
-
-## Development
-
-### Project Structure Convention
-- **PascalCase**: Classes, Entities, DTOs
-- **camelCase**: Functions, variables
-- **SCREAMING_SNAKE_CASE**: Constants
-
-### Coding Standards
-- Pure domain entities (no framework imports)
-- Business logic in domain layer
-- Use cases orchestrate only
-- Controllers handle HTTP only
-- Repositories behind interfaces
-
-## License
-
-MIT License - see [LICENSE](LICENSE)
-
-## Links
-
+- License: MIT (see [LICENSE](LICENSE)).
 - Repository: [https://github.com/hayamij/JS-TaskManager](https://github.com/hayamij/JS-TaskManager)
 - Issues: [https://github.com/hayamij/JS-TaskManager/issues](https://github.com/hayamij/JS-TaskManager/issues)
